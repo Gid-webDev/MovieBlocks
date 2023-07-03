@@ -22,10 +22,12 @@ header{
 
 .AsideRight .overview{
   background-size: cover;
-  background-position: top center;
+  background-position: center;
   background-repeat: no-repeat;
   width: 100%;
   min-height: 400px ;
+  position: absolute;
+  right: 0;
 }
 
 #slideImage{ 
@@ -33,31 +35,46 @@ header{
   background-position: top center;
   background-repeat: no-repeat;
   width: 100%;
-  min-height: 420px;
-  border-radius: 20px;
+  min-height: 440px;
   box-shadow: 0 0 8px 10px rgba(0, 0, 0, 0.8);
   transition: 2s ease-out;
 }
 
+#MovieDetails{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 420px;
+  width: 100%;
+  text-align: left;
+  z-index: 1;
+}
+
+.Trending-today{
+  background-color: #111;
+}
 
 .overlay {
   position: absolute;
-  top: 24px;
-  right: 11px;
-  width: 98%;
-  min-height: 420px;
-  background-color: #3d3d3de1;
-  mix-blend-mode: overlay;
-  border-radius: 20px
+  top: 54px;
+  width: 100%;
+  min-height: 440px;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 0;
+  right: 0;
 }
 
 .Slides_Btns{
   position: relative;
-  top: 200px;
+  top: 0;
   z-index: 5;
+  height: 420px;
+  width: 100%;
 }
 
 .Slides_Btns #btn{
+  position: relative;
+  top: 50%;
   padding: 5px;
   width: 40px;
   height: 40px;
@@ -67,6 +84,17 @@ header{
   color: #fff;
   font-size: 2em;
   display: flex;
+  z-index: 2;
+}
+
+.rating{
+  width: 35px;
+  height: 35px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: inline-block;
+  text-align: center;
 }
 
 /*  scroll functionality and appearance */
@@ -86,6 +114,12 @@ header{
   background-color: rgba(0, 202, 255, 0.95);
 } 
 
+/* Main page card container */
+#CardContainer{
+  margin-top: 520px;
+}
+
+/* Menu page card container */
 .Card-Container{
   overflow-x: auto;
   background-color: transparent;
@@ -178,8 +212,6 @@ input{
   text-align: left;
   background-color: #181818;
 }
-
-
 
 .MovieTrailer{
   position: absolute;
@@ -313,8 +345,6 @@ input{
 .arrows{
   position:relative;
   bottom: 47px;
-  left: ;
-  z-index: ;
   display: none;
 }
 
@@ -343,4 +373,8 @@ input{
   width: 100%;
 }
 
+}
+
+@media(max-width: 760px) {
+ 
 }
