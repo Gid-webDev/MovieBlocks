@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState } from 'react'
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi"
 import {FaPlay} from "react-icons/fa"
+import MovieCard from './MovieCard';
 
 
 
@@ -12,34 +13,24 @@ import {FaPlay} from "react-icons/fa"
 function MovieSlider({Movieslide}) {
     const timeRef = useRef(null);
     const [currSlide, setCurrSlide] = useState(0)
-    const SlidesBtns = ["text-light d-flex justify-content-between px-2 position-relative Slides_Btns"]
-    const slideImage =  currSlide? ({ backgroundImage:  `url('${images}${Movieslide[currSlide].backdrop_path}') `}) : 
-    ({ backgroundImage:  `url('${images}${Movieslide.backdrop_path}') `})
+    const SlidesBtns = ["text-light d-flex justify-content-between px-3 position-relative Slides_Btns"]
+    const slideImage =  currSlide?  ({ backgroundImage:  `url('${images}${Movieslide[currSlide].backdrop_path}') `})  : 
+   (null)
 
-    const MovieDetails = <div>
-          {/* dark overlay background for slides */}
-          <div className="">
-          <div className="container position-relative text-white   text-left">
-            <h1>
-            {Movieslide.original_title}
-           </h1>
-          </div>
-         </div>
-    </div>
-
+    
+    
+          
+        
 
     function Prev (){
         const FirstSlide = currSlide === 0
         const NewSlide =  FirstSlide?  Movieslide.length - 1 : currSlide - 1
         setCurrSlide(NewSlide)
-        console.log(NewSlide)
       }
-      
       
       function Next () {
         const LastSlide = currSlide === Movieslide.length - 1
         const NewSlide = LastSlide?  0  : currSlide + 1
-        console.log(NewSlide)
         setCurrSlide(NewSlide)
       }
 
@@ -51,14 +42,29 @@ function MovieSlider({Movieslide}) {
             clearTimeout(timeRef.current)
         }
         Next();
-       }, 5000)
+       }, 4500)
        return() => clearTimeout(timeRef.current)
       });
   return (
     <div>
     <section>
-        <figure id='slideImage' style={slideImage}>
+       <h2 className='text-light text-start py-1 px-1  Trending-today'>
+       Trending now</h2>
+        <figure id='slideImage' style={slideImage}> 
+        
+
+        <div className="container position-absolute  left-0  text-white   text-left">
+          {/* dark overlay background for slides */}
+          
+          </div>
         <div className={SlidesBtns}>
+        {currSlide? <div className='container position-absolute  px-4' id='MovieDetails'>
+        <h1> {Movieslide[currSlide].title } </h1>
+        <p>{Movieslide[currSlide].overview }</p>
+        <h5>Release date: {Movieslide[currSlide].release_date} &nbsp; &nbsp; Votes: <span className=' rating fs-5'>{Movieslide[currSlide].vote_average}</span> 
+          </h5>
+        </div> : null}
+        
            <div id="btn" onClick={Prev}> <BiChevronLeft/></div>
             {/*  Player button  is hidden with display none property */}
             <button className="play-btnSlides fs-2  d-flex align-items-center  d-none" onClick={() => setPlayer(true)}>
@@ -66,17 +72,10 @@ function MovieSlider({Movieslide}) {
        </button>
            <div id="btn" onClick={Next}> <BiChevronRight/></div>
          </div>
-         {MovieDetails}
     </figure>
 
-    <figure className="overlay">
-    
-    </figure>
-    
-
+    <figure className="overlay"></figure>
     </section>
-    
-
       
     </div>
   )
