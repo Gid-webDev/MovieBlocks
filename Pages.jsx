@@ -4,24 +4,25 @@ import axios from "axios";
 
 
 
-const Pages = ({setSvideo, selected, movieOption}) => {
+const Pages = ({setSvideo, selected, movieOption, MovieType}) => {
     const Video_API = "https://api.themoviedb.org/3";
     const myKey = '70aeaf6cc2f0f2330bec04f30130925d';
    
     
     const [currentPage, setCurrentPage] = useState(1)
+    const [Movieslide, setMovieslide] = useState([]);
 
     {/* Next page  */}
     const GetPage = async () => {
         const Type = "discover"
-        const MovieType = movieOption? 'movie' : 'tv'
         const {data} = await axios.get(`${Video_API}/${Type}/${MovieType}`,{
             params: {
                 page: (`${currentPage}`),
                 api_key: (`${myKey}`),
             }
         })
-          setSvideo(data.results, selected, movieOption)
+          setSvideo(data.results, selected, movieOption);
+          setMovieslide(data.results, selected, movieOption);
     }     
 
 

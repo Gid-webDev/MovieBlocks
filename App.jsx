@@ -17,6 +17,7 @@ import { ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
 import NavMenu from "./Menu";
 import Posters from "./Posters";
 import MovieSlider from "./MovieSlider";
+import {HiOutlineArrowNarrowLeft} from "react-icons/hi"
 import GetPage2 from "./Pages";
 import Pages from "./Pages";
 
@@ -47,10 +48,12 @@ const App = () => {
 
 
 
-    const Type = SearchMovies ? "search" : "discover"
+   
     const MovieType = movieOption? 'movie' : 'tv'
 
-  const GetVideo = async (SearchMovies) => {
+  const GetVideo = async (SearchMovies) => {  
+   
+    const Type = SearchMovies ? "search" : "discover"
     const { data: { results } } = await axios.get(`${Video_API}/${Type}/${MovieType}`, {
       params: {
         
@@ -78,9 +81,9 @@ const App = () => {
   }
 
 
-  const GetTrailer = async (Svideo, series, slide) => {
+  const GetTrailer = async (Svideo, slide) => {
     const data = await FetchVideo(Svideo.id)
-    setSelected(data, Svideo, series, slide)
+    setSelected(data, Svideo, slide)
     setPlayer(false)
   }
 
@@ -164,7 +167,7 @@ const App = () => {
 
 
   const CardContainer = [" sect text-light py-3   mx-1  row "];
-  const CardsHeadr = ["COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION"];
+  const CardsHeadr = ["filter", "COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION", "Nollywood", "Bollywood", "Wrestling", "UFC"];
   const CardStyle = ["CardImg   col-lg-3 col-md-4 col-sm-6"];
   const MenuCards = ["CardImg      mx-2"];
   const MenuPosters = ["d-flex posters  my-3  Card-Container"];
@@ -198,32 +201,54 @@ const App = () => {
        {/* Modal */}
        <Modal selected={selected} />
 
+     <div className="row mx-2">
+
+     <div className="col-md-8" id="CardsContainer">
      <div className={CardContainer}> 
-         <h4>{CardsHeadr[1]}</h4>
-       <div className={MenuPosters}  >
-         {Svideo.map((Svideo) => <div className={ MenuCards} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}><Posters Svideo={Svideo}/>
-         </div>)}
-        </div>
-        {Arrows}
-     </div> 
+     <h4>{CardsHeadr[1]}</h4>
+   <div className={MenuPosters}  >
+     {Svideo.map((Svideo) => <div className={ MenuCards} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}><Posters Svideo={Svideo}/>
+     </div>)}
+    </div>
+    {Arrows}
+ </div> 
+ 
+
+ <div className={CardContainer}> 
+     <h4>{CardsHeadr[2]}</h4>
+   <div className={MenuPosters}  >
+     {series.map((Svideo) => <div className={ MenuCards}  onClick={() => GetTrailer(Svideo, series, setShowModal(true))}><Posters Svideo={Svideo} />
+     </div>)}
+    </div>
+    {Arrows}
+ </div> 
+
+ <div className={CardContainer}> 
+     <h4>{CardsHeadr[3]}</h4>
+   <div className={MenuPosters}  >
+     {series.map((Svideo) => <div className={ MenuCards} ><Posters Svideo={Svideo}/></div>)}
+    </div> 
+    {Arrows}
+    
+ </div>
+     </div>
+
+     <div className="col-md-4 text-white text-start" id="MenuHeaders">
+     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[0]}</h4>
+
+     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[1]}</h4>
+
+     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[2]}</h4>
+
+     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[3]}</h4>
+
+     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[4]}</h4>
+
+     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[5]}</h4>
      
-
-     <div className={CardContainer}> 
-         <h4>{CardsHeadr[2]}</h4>
-       <div className={MenuPosters}  >
-         {series.map((Svideo) => <div className={ MenuCards}  onClick={() => GetTrailer(Svideo, series, setShowModal(true))}><Posters Svideo={Svideo} />
-         </div>)}
-        </div>
-        {Arrows}
-     </div> 
-
-     <div className={CardContainer}> 
-         <h4>{CardsHeadr[3]}</h4>
-       <div className={MenuPosters}  >
-         {series.map((Svideo) => <div className={ MenuCards} ><Posters Svideo={Svideo}/></div>)}
-        </div> 
-        {Arrows}
-        
+     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[6]}</h4>
+     </div>
+     
      </div> 
           
           <NavMenu/>
@@ -278,7 +303,7 @@ const App = () => {
                 </div>} />
 
                 <Button name={
-                  <div className="fs  rounded p-2" onClick={() => GetVideo(setType())}>
+                  <div className="fs  rounded p-2" onClick={() => GetVideo(setMovieOPtion(true))}>
                     <FaChromecast />
                     <span className="fs-6 " >  Trending </span>
                   </div>} />
@@ -338,16 +363,18 @@ const App = () => {
           </figure>
 
               {/* Moviecard rendering section */}
+
               <div className={CardContainer} id="CardContainer">
               <h2>{CardsHeadr[0]}</h2>
               {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}>
                 <MovieCard Svideo={Svideo} />
-              </div>))}          
+              </div>))} 
             </div>
             
             {/* Pagination, Prev and Next button/current page  */}
-            <div className="d-flex pt-2 pb-5">
-            <Pages setSvideo={setSvideo} selected={selected} Movieslide={Movieslide} />
+            <div className="d-flex pt-2 pb-5
+            ">
+            <Pages setSvideo={setSvideo} selected={selected} Movieslide={Movieslide} MovieType={MovieType}/>
           </div>
           </section>
         </div>
@@ -355,6 +382,8 @@ const App = () => {
 
       <footer className="bg-dark">
       </footer>
+
+
 
     </>
 
