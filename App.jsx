@@ -5,18 +5,20 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import Button from "./Button";
 import { BsSearch, BsFilm, BsSliders } from "react-icons/bs"
-import { BiChevronLeft, BiChevronRight, BiMoviePlay } from "react-icons/bi"
+import { BiChevronLeft, BiChevronRight, BiToggleLeft, BiToggleRight} from "react-icons/bi"
 import { FaChromecast } from "react-icons/fa"
-import { GiDramaMasks, GiFilmSpool } from "react-icons/gi"
+import {GiFilmSpool } from "react-icons/gi"
 import { CiYoutube } from "react-icons/ci"
 import { AiOutlineClose } from "react-icons/ai"
 import axios from "axios";
-import { FaPlay, FaTh } from "react-icons/fa"
+import { FaPlay, FaTh, FaToggleOn, FaToggleOff} from "react-icons/fa"
 import YouTube from "react-youtube"
 import { ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
 import NavMenu from "./Menu";
 import Posters from "./Posters";
 import MovieSlider from "./MovieSlider";
+import GetPage2 from "./Pages";
+import Pages from "./Pages";
 
 
 
@@ -40,36 +42,33 @@ const App = () => {
   const [show, setShow] = useState(false);
   const [type, setType] = useState(true);
   const [Movieslide, setMovieslide] = useState([]);
-  const [slide, setSlide] = useState([]);
+  const [mode, setMode] = useState(false);
+  const [movieOption, setMovieOPtion] = useState(true);
 
 
+
+    const Type = SearchMovies ? "search" : "discover"
+    const MovieType = movieOption? 'movie' : 'tv'
 
   const GetVideo = async (SearchMovies) => {
-    const Type = SearchMovies ? "search" : "discover"
-
-    const { data: { results } } = await axios.get(`${Video_API}/${Type}/movie`, {
+    const { data: { results } } = await axios.get(`${Video_API}/${Type}/${MovieType}`, {
       params: {
         
         page: 1,
         api_key: (`${myKey}`),
-        
         query: SearchMovies
       }
     })
-    setPlayer(false)
+    setPlayer(false);
     setSvideo(results);
     GetTrailer(results[0]);
-    setType(true)
-    setSlide(results)
-    setMovieslide(results)
-  }
+    setType(true);
+    setMovieslide(results);
+  } 
 
 
-
- let Type = (type? 'movie' : 'tv')
   const FetchVideo = async (id) => {
-    
-    const { data } = await axios.get(`${Video_API}/${Type}/${id}`, {
+    const { data } = await axios.get(`${Video_API}/${MovieType}/${id}`, {
       params: {
         api_key: (`${myKey}`),
         append_to_response: 'videos'
@@ -79,19 +78,18 @@ const App = () => {
   }
 
 
-
-
   const GetTrailer = async (Svideo, series, slide) => {
     const data = await FetchVideo(Svideo.id)
     setSelected(data, Svideo, series, slide)
     setPlayer(false)
   }
 
+  
 
 
 
   useEffect(() => {
-    GetTvSeries(); GetVideo();
+  GetVideo();
   }, []);
 
 
@@ -185,7 +183,7 @@ const App = () => {
   }
 
 
-  const CardContainer = [" sect text-light py-3  my-4 mx-1  row"];
+  const CardContainer = [" sect text-light py-3   mx-1  row "];
   const CardsHeadr = ["COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION"];
   const CardStyle = ["CardImg   col-lg-3 col-md-4 col-sm-6"];
   const MenuCards = ["CardImg      mx-2"];
@@ -193,8 +191,10 @@ const App = () => {
   const Arrows = ( <div className="arrows d-flex justify-content-between">
                    <button className="arrows"><h2><BiChevronLeft className="text-danger"/></h2></button>  
                    <button className="arrows"><h2><BiChevronRight className="text-danger"/></h2></button> </div>)
-  const SlidesBtns = ["text-light d-flex justify-content-between px-2 position-relative Slides_Btns"]
-  const carouselContainer = ["carouselContainer" ]
+  const DarkMode = ["bg-dark row dark"]
+  const LightMode = ["bg-light row light"]
+  const Mode = mode?  LightMode : DarkMode
+  
 
 
 
@@ -204,7 +204,12 @@ const App = () => {
          
         {show&& <div className="Menu-container">
         <div className="menuHeader px-4   d-flex justify-content-between" > 
-           <div></div>
+            {/* dark and light mode toggle */}
+          <h4>
+          {mode? (<div className="btn text-info" onClick={()=> {setMode(false)}}>Dark mode <FaToggleOff className="fs-5"/></div>)
+        : <div className="btn text-info" onClick={()=> {setMode(true)}}>Dark mode <FaToggleOn className="fs-5"/></div>}
+        </h4>
+
            <button onClick={() => setShow(false)} className="CloseMenu btn btn-outline-info   fs-5 " id="CloseMenu"> 
             <AiOutlineClose />
            </button>
@@ -256,6 +261,8 @@ const App = () => {
           
          
           <div className="d-flex align-items-center justify-content-between" id="inputMenu">
+         
+          {/* search input & button */}
             <form onSubmit={Searcher} className="input-container bg-info rounded  d-flex p-1">
               <input type="text"
                 placeholder="Search for movies"
@@ -268,6 +275,7 @@ const App = () => {
 
             </form>
 
+            {/* menu */}
             <Button name={
               <h3 className="text-info">
                 <FaTh onClick={() => setShow(true)} />
@@ -276,24 +284,17 @@ const App = () => {
         </div>
       </header>
 
-      <main className="bg-dark">
+      <main className="">
       
-        <div className="  row" id="main-container">
+        <div className={Mode} id="main-container">
         
-          <section className="SideBar  py-3  d-flex justify-content-center col-lg-2">
-            <div className="sideBar-container    d-none d-sm-flex  justify-content-start d-lg-block   position-fixed">
+          <section className="SideBar  py-3  d-flex justify-content-center col-lg-2 col-md-0 d-none d-lg-block">
+            <div className="sideBar-container   d-none  justify-content-start d-lg-block   position-fixed">
 
               <Button name={
-                <div className="fs  rounded p-2" onClick={() => GetVideo(setType())}>
-                  <FaChromecast />
-                  <span className="fs-6 " >  Trending </span>
-                </div>} />
-
-              <Button name={
-                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex" 
-                onClick={()=> {setSvideo( series, setType(false))}}>
-                  <BiMoviePlay />
-                  <span className="fs-6 " >Tv Series </span>
+                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex">
+                {mode? (<div className="dark" onClick={()=> {setMode(false)}}><BiToggleLeft className="fs-4"/> &nbsp; &nbsp; Dark mode</div>)
+                : <div className="light" onClick={()=> {setMode(true)}}><BiToggleRight className="fs-4"/> &nbsp; &nbsp; Dark mode</div>}
                 </div>}    
               />
 
@@ -302,6 +303,18 @@ const App = () => {
                   <BsSliders />
                   <span className="fs-6" > filter movies</span>
                 </div>} />
+
+                <Button name={
+                  <div className="fs  rounded p-2" onClick={() => GetVideo(setType())}>
+                    <FaChromecast />
+                    <span className="fs-6 " >  Trending </span>
+                  </div>} />
+
+                  <Button name={
+                    <div className="fs  rounded p-2" onClick={() => GetVideo(setMovieOPtion(false))}>
+                      <FaChromecast />
+                      <span className="fs-6 " >  Tv series </span>
+                    </div>} />
 
               <Button name={
                 <div className="fs  rounded p-2  d-flex d-none  d-lg-flex  d-md-flex" onClick={() => GetVideo('e', setType(false))}>
@@ -338,10 +351,10 @@ const App = () => {
             </div>
           </section>
 
-          <section className="AsideRight   position-relative  justify-content-center col">
+          <section className="AsideRight   position-relative  justify-content-center col-lg-10  col-sm-12">
           
           
-          <figure className="overview mt-4">
+          <figure className="overview mt-2 ">
             {/* Modal */}
              <Modal selected={selected} />
 
@@ -352,18 +365,26 @@ const App = () => {
           </figure>
 
               {/* Moviecard rendering section */}
-              <div className={CardContainer}>
+              <div className={CardContainer} id="CardContainer">
               <h2>{CardsHeadr[0]}</h2>
               {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}>
                 <MovieCard Svideo={Svideo} />
               </div>))}
-            </div>
+              
 
+              
+            </div>
+            
+            {/* Pagination, Prev and Next button/current page  */}
+            <div className="d-flex pt-2 pb-5
+            ">
+            <Pages setSvideo={setSvideo} selected={selected} Movieslide={Movieslide} />
+          </div>
           </section>
         </div>
       </main>
 
-      <footer className="bg-light">
+      <footer className="bg-dark">
       </footer>
 
 
