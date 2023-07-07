@@ -119,26 +119,6 @@ const App = () => {
   }
 
 
-  const GetTvSeries = async (SearchMovies) => {
-    const Type = SearchMovies ? "search" : "discover"
-
-    const { data: { results } } = await axios.get(`${Video_API}/${Type}/tv`, {
-      params: {
-        
-        page: 2,
-        api_key: (`${myKey}`),
-        
-        query: SearchMovies
-      }
-    })
-    setSeries(results);
-    setPlayer(false);
-    setType(false);
-    setSvideo(results)
-    
-  }   
-
-
 
   const Modal = ({ selected }) => {
     return (
@@ -245,13 +225,6 @@ const App = () => {
         {Arrows}
         
      </div> 
-     
-
-     
-    
-    
-     
-     
           
           <NavMenu/>
           </div> }
@@ -369,15 +342,11 @@ const App = () => {
               <h2>{CardsHeadr[0]}</h2>
               {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}>
                 <MovieCard Svideo={Svideo} />
-              </div>))}
-              
-
-              
+              </div>))}          
             </div>
             
             {/* Pagination, Prev and Next button/current page  */}
-            <div className="d-flex pt-2 pb-5
-            ">
+            <div className="d-flex pt-2 pb-5">
             <Pages setSvideo={setSvideo} selected={selected} Movieslide={Movieslide} />
           </div>
           </section>
@@ -386,8 +355,6 @@ const App = () => {
 
       <footer className="bg-dark">
       </footer>
-
-
 
     </>
 
