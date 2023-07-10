@@ -319,7 +319,7 @@ const App = () => {
               <Button name={
                 <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[4]))}>
                   <BsFilm />
-                  <span className="fs-6 "> Documentry </span>
+                  <span className="fs-6 "> Documentary </span>
                 </div>} />
 
               <Button name={
@@ -384,7 +384,7 @@ const App = () => {
             
             {/* Pagination, Prev and Next button/current page  */}
             <div className="d-flex pt-2 pb-5">
-            <Pages setSvideo={setSvideo} selected={selected}  Svideo={Svideo} Movieslide={Movieslide} MovieType={MovieType} showGenre={''}/>
+            <Pages setSvideo={setSvideo} selected={selected} genre={genre} Movieslide={Movieslide} MovieType={MovieType} showGenre={''}/>
           </div>
           </section>
         </div>
