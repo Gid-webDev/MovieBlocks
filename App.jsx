@@ -49,7 +49,7 @@ const App = () => {
  
 
   const MovieType = movieOption? 'movie' : 'tv';
-  const GenreArray = [28, 16, 12, 27, 99, 10751, 878, 10770, 36, 10402, 35, 18];
+  const GenreArray = [28, 16, 12, 27, 99, 10751, 878, 10770, 36, 10402, 35, 18, 10763, 10764, 10749, 10762, 10767];
   
   const GetVideo = async (SearchMovies) => {  
     const Type = SearchMovies ? "search" : "discover"
@@ -313,14 +313,18 @@ const App = () => {
                       </div>} /> : <Button name={
                         <div className={GenreBtn} onClick={() => GetVideo(setGenre(setMovieOPtion(true), GenreArray[0]))}>
                           <BsToggles2 className="fs-4"/>
-                          <span className="fs-6 " >  Tv series </span>
+                          <span className="fs-6 " >  Tv shows </span>
                         </div>} />}
-                    
-              <Button name={
+                 
+               {movieOption !== true? <Button name={
                 <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[4]))}>
                   <BsFilm />
                   <span className="fs-6 "> Documentary </span>
-                </div>} />
+                </div>} /> : <Button name={
+                  <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[8]))}>
+                    <BsFilm />
+                    <span className="fs-6 "> History </span>
+                  </div>} />}         
 
               <Button name={
                 <div className={GenreBtn} onClick={() => GetVideo('wwe', setType())}>
@@ -328,35 +332,58 @@ const App = () => {
                   <span className="fs-6  " > Wrestling </span>
                 </div>} />
 
-              <Button name={
-                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[1]))} >
+                {movieOption !== true? <Button name={
+                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[15]))} >
+                    <BsFilm />
+                    <span className="fs-6 " > Kids show</span>
+                  </div>}
+                /> : <Button name={
+                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[1]))} >
+                    <BsFilm />
+                    <span className="fs-6 " >Animation</span>
+                  </div>}
+                />}
+              
+  
+              {movieOption !== true? <Button name={
+                <div className={GenreBtn} onClick={() => GetVideo(setGenre(GenreArray[12]))}>
                   <BsFilm />
-                  <span className="fs-6 " >Animation</span>
+                  <span className="fs-6 " > News </span>
                 </div>}
-              />
-
-              <Button name={
-                <div className={GenreBtn} onClick={() => GetVideo('ufc')}>
+              /> : <Button name={
+                <div className={GenreBtn} onClick={() => GetVideo(setGenre(GenreArray[14]))}>
                   <BsFilm />
-                  <span className="fs-6 " > UFC </span>
+                  <span className="fs-6 " > Romance </span>
                 </div>}
-              />
+              />}
+              
 
-              <Button name={
+              {movieOption !== true? <Button name={
+                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[13]))} >
+                  <BsFilm />
+                  <span className="fs-6 " >Reality TV</span>
+                </div>}
+              /> : <Button name={
                 <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[9]))} >
                   <BsFilm />
                   <span className="fs-6 " >Musicals</span>
                 </div>}
-              />
+              />}
+              
 
 
-
-                <Button name={
-                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[5]))} >
-                  <BsFilm />
-                  <span className="fs-6 " >Family</span>
-                </div>}
-              />
+                {movieOption !== true? <Button name={
+                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[16]))} >
+                    <BsFilm />
+                    <span className="fs-6 " >Talk show</span>
+                  </div>}
+                /> : <Button name={
+                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[5]))} >
+                    <BsFilm />
+                    <span className="fs-6 " >Family</span>
+                  </div>}
+                />}
+                
             </div>
           </section>
 
