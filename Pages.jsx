@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 
-const Pages = ({setSvideo, selected, movieOption, MovieType}) => {
+const Pages = ({setSvideo, selected, movieOption, MovieType, showGenre, Svideo}) => {
     const Video_API = "https://api.themoviedb.org/3";
     const myKey = '70aeaf6cc2f0f2330bec04f30130925d';
    
@@ -21,8 +21,8 @@ const Pages = ({setSvideo, selected, movieOption, MovieType}) => {
                 api_key: (`${myKey}`),
             }
         })
-          setSvideo(data.results, selected, movieOption);
-          setMovieslide(data.results, selected, movieOption);
+          setSvideo(data.results, selected, movieOption, showGenre, Svideo);
+          setMovieslide(data.results, selected, movieOption, showGenre, Svideo);
     }     
 
 

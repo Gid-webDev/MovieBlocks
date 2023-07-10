@@ -9,17 +9,17 @@ import { BiChevronLeft, BiChevronRight, BiToggleLeft, BiToggleRight} from "react
 import { FaChromecast } from "react-icons/fa"
 import {GiFilmSpool } from "react-icons/gi"
 import { CiYoutube } from "react-icons/ci"
-import { AiOutlineClose } from "react-icons/ai"
+import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
-import { FaPlay, FaTh, FaToggleOn, FaToggleOff} from "react-icons/fa"
+import { FaPlay, FaTh, FaToggleOn, FaToggleOff} from "react-icons/fa";
 import YouTube from "react-youtube"
 import { ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
 import NavMenu from "./Menu";
 import Posters from "./Posters";
 import MovieSlider from "./MovieSlider";
-import {HiOutlineArrowNarrowLeft} from "react-icons/hi"
-import GetPage2 from "./Pages";
+import {HiOutlineArrowNarrowLeft} from "react-icons/hi";
 import Pages from "./Pages";
+import {BsToggles2} from "react-icons/bs";
 
 
 
@@ -45,21 +45,21 @@ const App = () => {
   const [Movieslide, setMovieslide] = useState([]);
   const [mode, setMode] = useState(false);
   const [movieOption, setMovieOPtion] = useState(true);
+  const [genre, setGenre] = useState([0]);
+ 
 
-
-
-   
-    const MovieType = movieOption? 'movie' : 'tv'
-
+  const MovieType = movieOption? 'movie' : 'tv';
+  const GenreArray = [28, 16, 12, 27, 99, 10751, 878, 10770, 36, 10402, 35, 18];
+  
   const GetVideo = async (SearchMovies) => {  
-   
     const Type = SearchMovies ? "search" : "discover"
     const { data: { results } } = await axios.get(`${Video_API}/${Type}/${MovieType}`, {
       params: {
         
-        page: 1,
         api_key: (`${myKey}`),
+        with_genres: genre,
         query: SearchMovies
+        
       }
     })
     setPlayer(false);
@@ -67,6 +67,7 @@ const App = () => {
     GetTrailer(results[0]);
     setType(true);
     setMovieslide(results);
+    console.log(genre)
   } 
 
 
@@ -177,6 +178,7 @@ const App = () => {
   const DarkMode = ["bg-dark row dark"]
   const LightMode = ["bg-light row light"]
   const Mode = mode?  LightMode : DarkMode
+  const GenreBtn = ["fs  rounded p-2  d-flex d-none  d-lg-flex"]
   
 
 
@@ -290,60 +292,69 @@ const App = () => {
             <div className="sideBar-container   d-none  justify-content-start d-lg-block   position-fixed">
 
               <Button name={
-                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex">
+                <div className={GenreBtn}>
                 {mode? (<div className="dark" onClick={()=> {setMode(false)}}><BiToggleLeft className="fs-4"/> &nbsp; &nbsp; Dark mode</div>)
                 : <div className="light" onClick={()=> {setMode(true)}}><BiToggleRight className="fs-4"/> &nbsp; &nbsp; Dark mode</div>}
                 </div>}    
               />
 
               <Button name={
-                <div className="fs  rounded p-2" onClick={() => alert('Filter has been disabled')}>
+                <div className={GenreBtn} onClick={() => alert('Filter has been disabled')}>
                   <BsSliders />
                   <span className="fs-6" > filter movies</span>
                 </div>} />
 
-                <Button name={
-                  <div className="fs  rounded p-2" onClick={() => GetVideo(setMovieOPtion(true))}>
-                    <FaChromecast />
-                    <span className="fs-6 " >  Trending </span>
-                  </div>} />
+                
 
-                  <Button name={
-                    <div className="fs  rounded p-2" onClick={() => GetVideo(setMovieOPtion(false))}>
-                      <FaChromecast />
-                      <span className="fs-6 " >  Tv series </span>
-                    </div>} />
-
+                  {movieOption? <Button name={
+                      <div className={GenreBtn} onClick={() => GetVideo(setGenre(setMovieOPtion(false), GenreArray[0]))}>
+                        <BsToggles2 className="fs-4"/>
+                        <span className="fs-6 " >  Movies </span>
+                      </div>} /> : <Button name={
+                        <div className={GenreBtn} onClick={() => GetVideo(setGenre(setMovieOPtion(true), GenreArray[0]))}>
+                          <BsToggles2 className="fs-4"/>
+                          <span className="fs-6 " >  Tv series </span>
+                        </div>} />}
+                    
               <Button name={
-                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex  d-md-flex" onClick={() => GetVideo('e', setType(false))}>
+                <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[4]))}>
                   <BsFilm />
-                  <span className="fs-6 "> Hollywood </span>
+                  <span className="fs-6 "> Documentry </span>
                 </div>} />
 
               <Button name={
-                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex" onClick={() => GetVideo('wwe', setType())}>
+                <div className={GenreBtn} onClick={() => GetVideo('wwe', setType())}>
                   <GiFilmSpool />
                   <span className="fs-6  " > Wrestling </span>
                 </div>} />
 
               <Button name={
-                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex" onClick={() => GetVideo('bolly')}>
+                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[1]))} >
                   <BsFilm />
-                  <span className="fs-6 " > Bollywood </span>
+                  <span className="fs-6 " >Animation</span>
                 </div>}
               />
 
               <Button name={
-                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex" onClick={() => GetVideo('ufc')}>
+                <div className={GenreBtn} onClick={() => GetVideo('ufc')}>
                   <BsFilm />
                   <span className="fs-6 " > UFC </span>
                 </div>}
               />
 
               <Button name={
-                <div className="fs  rounded p-2  d-flex d-none  d-lg-flex" onClick={() => GetVideo()}>
-                  <CiYoutube />
-                  <span className="fs-6 " >  Nollywood </span>
+                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[9]))} >
+                  <BsFilm />
+                  <span className="fs-6 " >Musicals</span>
+                </div>}
+              />
+
+
+
+                <Button name={
+                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[5]))} >
+                  <BsFilm />
+                  <span className="fs-6 " >Family</span>
                 </div>}
               />
             </div>
@@ -365,16 +376,15 @@ const App = () => {
               {/* Moviecard rendering section */}
 
               <div className={CardContainer} id="CardContainer">
-              <h2>{CardsHeadr[0]}</h2>
+              <h2>{CardsHeadr[1]}</h2>
               {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}>
                 <MovieCard Svideo={Svideo} />
               </div>))} 
             </div>
             
             {/* Pagination, Prev and Next button/current page  */}
-            <div className="d-flex pt-2 pb-5
-            ">
-            <Pages setSvideo={setSvideo} selected={selected} Movieslide={Movieslide} MovieType={MovieType}/>
+            <div className="d-flex pt-2 pb-5">
+            <Pages setSvideo={setSvideo} selected={selected}  Svideo={Svideo} Movieslide={Movieslide} MovieType={MovieType} showGenre={''}/>
           </div>
           </section>
         </div>
