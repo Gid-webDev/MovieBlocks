@@ -20,6 +20,7 @@ import MovieSlider from "./MovieSlider";
 import {HiOutlineArrowNarrowLeft} from "react-icons/hi";
 import Pages from "./Pages";
 import {BsToggles2} from "react-icons/bs";
+import GenreBox from "./GenreBox";
 
 
 
@@ -48,8 +49,26 @@ const App = () => {
   const [genre, setGenre] = useState([0]);
  
 
+ 
+  {/* each genre has a unique ID which is a number 
+   
+MOVIE
+Action => 28,       Adventure=> 12,                Animation => 16, 
+Comedy => 35,       Crime =>  80,                  Documentary =>  99, 
+Drama =>  18,       Family => 10751,               Fantasy =>14, 
+History=>36,        Horror => 27,                  Music => 10402, 
+Mystery => 9648,    Romance => 10749, Science      Fiction 878
+TV Movie =>  10770, Thriller => 53, War => 10752,  Western => 37
+
+TV SHOW
+Action & Adventure => 10759,   Animation => 16,   Comedy => 35,                  Crime  =>  80
+Documentary => 99,             Drama => 18,       Family => 10751,               Kids  =>  10762
+Mystery => 9648,               News  => 10763,    Reality  => 10764,             Sci-Fi & Fantasy => 10765
+Soap  =>  10766,               Talk  =>  10767,    War & Politics  =>  10768  
+Western  =>  37
+*/}
+  const GenreArray = [28, 16, 12, 27, 99, 10751, 878, 10770, 36, 10402, 35, 18, 10763, 10764, 10749, 10762, 10767, 10766, 10768, 10765];
   const MovieType = movieOption? 'movie' : 'tv';
-  const GenreArray = [28, 16, 12, 27, 99, 10751, 878, 10770, 36, 10402, 35, 18, 10763, 10764, 10749, 10762, 10767];
   
   const GetVideo = async (SearchMovies) => {  
     const Type = SearchMovies ? "search" : "discover"
@@ -86,12 +105,10 @@ const App = () => {
     const data = await FetchVideo(Svideo.id)
     setSelected(data, Svideo, slide)
     setPlayer(false)
+    console.log(data)
   }
 
   
-
-
-
   useEffect(() => {
   GetVideo();
   }, []);
@@ -103,22 +120,24 @@ const App = () => {
   }
 
   const RenderTrailer = () => {
-    const FirstTrailer = selected.videos.results[0].key; 
-    const  OfficialTrailer = selected.videos.results.find(vid => vid.name =='Official Trailer');
-    const Trailer = OfficialTrailer? OfficialTrailer.key : FirstTrailer 
+    
+    const FirstTrailer = selected.videos.results[0]?  selected.videos.results[0].key : selected.videos.results[0]
+    const  OfficialTrailer =  selected.videos.results.find(vid => vid.name =='Official Trailer')? 
+    selected.videos.results.find(vid => vid.name =='Official Trailer').key : selected.videos.results.find(vid => vid.name =='Official Trailer')
+    const Trailer = OfficialTrailer? OfficialTrailer : FirstTrailer
   
     return (
       <YouTube
-        videoId={Trailer? Trailer : <YouTube/>}
-        containerClassName={'PlayerContainer'}
-        opts={{
-          width: '100%',
-          height: '300px',
-          playerVars: {
-            autoplay: 1,
-            controls: 1
-          }
-        }} />
+      videoId={Trailer}
+      containerClassName={'PlayerContainer'}
+      opts={{
+        width: '100%',
+        height: '300px',
+        playerVars: {
+          autoplay: 1,
+          controls: 1
+        }
+      }} /> 
     )
   }
 
@@ -179,7 +198,7 @@ const App = () => {
   const LightMode = ["bg-light row light"]
   const Mode = mode?  LightMode : DarkMode
   const GenreBtn = ["fs  rounded p-2  d-flex d-none  d-lg-flex"]
-  
+  const [showFilter, setShowFilter] = useState(false);
 
 
 
@@ -204,51 +223,27 @@ const App = () => {
        <Modal selected={selected} />
 
      <div className="row mx-2">
-
-     <div className="col-md-8" id="CardsContainer">
+     {/* Collections col-1 */}
+     <div className="col-md-10" id="CardsContainer">
      <div className={CardContainer}> 
-     <h4>{CardsHeadr[1]}</h4>
+     <h6>{CardsHeadr[1]}</h6>
    <div className={MenuPosters}  >
      {Svideo.map((Svideo) => <div className={ MenuCards} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}><Posters Svideo={Svideo}/>
      </div>)}
     </div>
     {Arrows}
+
+    {/* Slide images */}
+    <MovieSlider Movieslide={Movieslide}/>
  </div> 
+
  
-
- <div className={CardContainer}> 
-     <h4>{CardsHeadr[2]}</h4>
-   <div className={MenuPosters}  >
-     {series.map((Svideo) => <div className={ MenuCards}  onClick={() => GetTrailer(Svideo, series, setShowModal(true))}><Posters Svideo={Svideo} />
-     </div>)}
-    </div>
-    {Arrows}
- </div> 
-
- <div className={CardContainer}> 
-     <h4>{CardsHeadr[3]}</h4>
-   <div className={MenuPosters}  >
-     {series.map((Svideo) => <div className={ MenuCards} ><Posters Svideo={Svideo}/></div>)}
-    </div> 
-    {Arrows}
-    
- </div>
      </div>
-
-     <div className="col-md-4 text-white text-start" id="MenuHeaders">
-     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[0]}</h4>
-
-     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[1]}</h4>
-
-     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[2]}</h4>
-
-     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[3]}</h4>
-
-     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[4]}</h4>
-
-     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[5]}</h4>
-     
-     <h4 onClick={()=> ('')}> <HiOutlineArrowNarrowLeft/> {CardsHeadr[6]}</h4>
+     {/* Genre buttons rendered through GenreBox component  col-2 */}
+     <div className="col-md-2 text-white text-start mt-5" id="MenuHeaders">
+      <GenreBox GenreBtn={GenreBtn} GetVideo={GetVideo} setGenre={setGenre} 
+      setMovieOPtion={setMovieOPtion} setShowFilter={setShowFilter} movieOption={movieOption} 
+      GenreArray={GenreArray}/>
      </div>
      
      </div> 
@@ -263,18 +258,28 @@ const App = () => {
           <div className="d-flex align-items-center justify-content-between" id="inputMenu">
          
           {/* search input & button */}
-            <form onSubmit={Searcher} className="input-container bg-info rounded  d-flex p-1">
-              <input type="text"
-                placeholder="Search for movies"
-                value={SearchMovies}
-                onChange={(e) => setSearchMovies(e.target.value)}
-              />
-              <button className="btn" onClick={() => GetVideo(SearchMovies)}>
-                <BsSearch type="submit" />
-              </button>
+          {movieOption? <form onSubmit={Searcher} className="input-container bg-info rounded  d-flex p-1">
+          <input type="text"
+            placeholder="Search movies"
+            value={SearchMovies}
+            onChange={(e) => setSearchMovies(e.target.value)}
+          />
+          <button className="btn" onClick={() => GetVideo(movieOption !== true? console.log("can't search") : SearchMovies)}>
+            <BsSearch type="submit" />
+          </button>
 
-            </form>
+        </form>  :  <Button name={
+          <div className='disabled text-light' onClick={''}>
+            
+            <span className="fs-6 " > Search disabled </span>
+          </div>} />  }
 
+            {/* dark and light mode toggle */}
+          <h4>
+          {mode? (<div className=" text-info" onClick={()=> {setMode(false)}}> <BiToggleLeft className="fs-4"/></div>)
+            : <div className=" text-info" onClick={()=> {setMode(true)}}> <BiToggleRight className="fs-4"/></div>}
+          </h4>
+            
             {/* menu */}
             <Button name={
               <h3 className="text-info">
@@ -290,99 +295,13 @@ const App = () => {
         
           <section className="SideBar  py-3  d-flex justify-content-center col-lg-2 col-md-0 d-none d-lg-block">
             <div className="sideBar-container   d-none  justify-content-start d-lg-block   position-fixed">
-
-              <Button name={
-                <div className={GenreBtn}>
-                {mode? (<div className="dark" onClick={()=> {setMode(false)}}><BiToggleLeft className="fs-4"/> &nbsp; &nbsp; Dark mode</div>)
-                : <div className="light" onClick={()=> {setMode(true)}}><BiToggleRight className="fs-4"/> &nbsp; &nbsp; Dark mode</div>}
-                </div>}    
-              />
-
-              <Button name={
-                <div className={GenreBtn} onClick={() => alert('Filter has been disabled')}>
-                  <BsSliders />
-                  <span className="fs-6" > filter movies</span>
-                </div>} />
-
-                
-
-                  {movieOption? <Button name={
-                      <div className={GenreBtn} onClick={() => GetVideo(setGenre(setMovieOPtion(false), GenreArray[0]))}>
-                        <BsToggles2 className="fs-4"/>
-                        <span className="fs-6 " >  Movies </span>
-                      </div>} /> : <Button name={
-                        <div className={GenreBtn} onClick={() => GetVideo(setGenre(setMovieOPtion(true), GenreArray[0]))}>
-                          <BsToggles2 className="fs-4"/>
-                          <span className="fs-6 " >  Tv shows </span>
-                        </div>} />}
-                 
-               {movieOption !== true? <Button name={
-                <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[4]))}>
-                  <BsFilm />
-                  <span className="fs-6 "> Documentary </span>
-                </div>} /> : <Button name={
-                  <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[8]))}>
-                    <BsFilm />
-                    <span className="fs-6 "> History </span>
-                  </div>} />}         
-
-              <Button name={
-                <div className={GenreBtn} onClick={() => GetVideo('wwe', setType())}>
-                  <GiFilmSpool />
-                  <span className="fs-6  " > Wrestling </span>
-                </div>} />
-
-                {movieOption !== true? <Button name={
-                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[15]))} >
-                    <BsFilm />
-                    <span className="fs-6 " > Kids show</span>
-                  </div>}
-                /> : <Button name={
-                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[1]))} >
-                    <BsFilm />
-                    <span className="fs-6 " >Animation</span>
-                  </div>}
-                />}
-              
-  
-              {movieOption !== true? <Button name={
-                <div className={GenreBtn} onClick={() => GetVideo(setGenre(GenreArray[12]))}>
-                  <BsFilm />
-                  <span className="fs-6 " > News </span>
-                </div>}
-              /> : <Button name={
-                <div className={GenreBtn} onClick={() => GetVideo(setGenre(GenreArray[14]))}>
-                  <BsFilm />
-                  <span className="fs-6 " > Romance </span>
-                </div>}
-              />}
-              
-
-              {movieOption !== true? <Button name={
-                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[13]))} >
-                  <BsFilm />
-                  <span className="fs-6 " >Reality TV</span>
-                </div>}
-              /> : <Button name={
-                <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[9]))} >
-                  <BsFilm />
-                  <span className="fs-6 " >Musicals</span>
-                </div>}
-              />}
-              
-
-
-                {movieOption !== true? <Button name={
-                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[16]))} >
-                    <BsFilm />
-                    <span className="fs-6 " >Talk show</span>
-                  </div>}
-                /> : <Button name={
-                  <div className={GenreBtn} onClick={()=> GetVideo(setGenre(GenreArray[5]))} >
-                    <BsFilm />
-                    <span className="fs-6 " >Family</span>
-                  </div>}
-                />}
+            
+           {/* Genre buttons rendered through GenreBox component */}
+          <div className="col-md-4 text-white text-start" id="MenuHeaders">
+          <GenreBox GenreBtn={GenreBtn} GetVideo={GetVideo} setGenre={setGenre} 
+          setMovieOPtion={setMovieOPtion} setShowFilter={setShowFilter} movieOption={movieOption} 
+          GenreArray={GenreArray}/>
+        </div>
                 
             </div>
           </section>
@@ -394,14 +313,13 @@ const App = () => {
             {/* Modal */}
              <Modal selected={selected} />
 
-             {/* Slide images */}
+             {/* Rendering slides images */}
              <MovieSlider Movieslide={Movieslide}/>
 
              
           </figure>
 
               {/* Moviecard rendering section */}
-
               <div className={CardContainer} id="CardContainer">
               <h2>{CardsHeadr[1]}</h2>
               {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}>
