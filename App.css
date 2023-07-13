@@ -8,12 +8,44 @@ header{
 }
 
 .Menu-container{
-  background-color: rgba(0, 0, 0, 0.87);
+  background-color: rgba(40, 13, 13, 0.87);
   position: absolute;
   width: 100%;
-  height: 100vh;
+  height: 200vh;
   top: 0;
   overflow-y: auto;
+}
+
+.MenuBlocks{
+  position: relative;
+  outline: none;
+  border: none;
+}
+
+.menuHeader{
+  margin-top: 15px;
+}
+
+.MenuStyle{
+  background-color: rgba(0, 0, 0, 0.9);
+  text-align: center;
+  right: 0;
+  position: absolute;
+  list-style: none;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+#CloseMenu{display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  height: 42px;
+}
+
+.posters{
+   overflow-x: auto;
+   flex-wrap: nowrap;
 }
 
 .Cards{
@@ -56,7 +88,7 @@ header{
 
 .overlay {
   position: absolute;
-  top: 50px;
+  top: ;
   width: 100%;
   min-height: 444px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -125,48 +157,24 @@ header{
   background-color: transparent;
 }
 
+.Filter{
+  position: absolute;
+  width: 200px;
+  height: 70vh;
+}
+
+.Filter button{
+}
+
 .Card-Container::-webkit-scrollbar{
   background-color: transparent;
 }
 
 .Card-Container::-webkit-scrollbar-button{
   background-color: rgba(0, 202, 255, 0.95); 
-  border-radius: 10px;
-  width: 18px;
+  border-radius: 0px;
+  width: 20px;
   z-index: 5;
-}
-
-
-.MenuBlocks{
-  position: relative;
-  outline: none;
-  border: none;
-}
-
-.menuHeader{
-  margin-top: 40px;
-}
-
-.MenuStyle{
-  background-color: rgba(0, 0, 0, 0.9);
-  text-align: center;
-  right: 0;
-  position: absolute;
-  list-style: none;
-  overflow-y: auto;
-  z-index: 1;
-}
-
-#CloseMenu{display: flex;
-  justify-content: center;
-  align-items: center;
-  outline: none;
-  height: 42px;
-}
-
-.posters{
-   overflow-x: auto;
-   flex-wrap: nowrap;
 }
 
 main{
