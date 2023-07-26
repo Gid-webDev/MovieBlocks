@@ -17,9 +17,8 @@ import { ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
 import NavMenu from "./Menu";
 import Posters from "./Posters";
 import MovieSlider from "./MovieSlider";
-import {HiOutlineArrowNarrowLeft} from "react-icons/hi";
 import Pages from "./Pages";
-import {BsToggles2} from "react-icons/bs";
+import {MdModeNight, MdLightMode} from "react-icons/md";
 import GenreBox from "./GenreBox";
 
 
@@ -74,7 +73,7 @@ Western  =>  37
     const Type = SearchMovies ? "search" : "discover"
     const { data: { results } } = await axios.get(`${Video_API}/${Type}/${MovieType}`, {
       params: {
-        
+        page: (`${currentPage}`),
         api_key: (`${myKey}`),
         with_genres: genre,
         query: SearchMovies
@@ -185,8 +184,13 @@ Western  =>  37
     );
   }
 
-
-  const CardContainer = [" sect text-light py-3   mx-1  row "];
+/* Dark Mode for cards */
+  const CardContainer_D = [" sect text-light py-3  row w-100"];
+  /* Light Mode for cards */
+  const CardContainer_L = [" sect text-light py-3 bg-light row w-100"];
+  mode? CardContainer_L : CardContainer_D
+  const HeaderStyly_D = [" text-secondary py-0 fixed-top bg-black"]
+  const HeaderStyly_L = [" text-secondary py-0 fixed-top bg-white"];
   const CardsHeadr = ["filter", "COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION", "Nollywood", "Bollywood", "Wrestling", "UFC"];
   const CardStyle = ["CardImg   col-lg-3 col-md-4 col-sm-6"];
   const MenuCards = ["CardImg      mx-2"];
@@ -204,35 +208,37 @@ Western  =>  37
 
   return (
     <>
-      <header className=" text-secondary py-2 fixed-top">
+      <header className={mode? HeaderStyly_L : HeaderStyly_D}>
          
         {show&& <div className="Menu-container">
-        <div className="menuHeader px-4   d-flex justify-content-between" > 
+        <div className="menuHeader px-3   d-flex justify-content-between" > 
             {/* dark and light mode toggle */}
           <h4>
           {mode? (<div className="btn text-info" onClick={()=> {setMode(false)}}>Dark mode <FaToggleOff className="fs-5"/></div>)
         : <div className="btn text-info" onClick={()=> {setMode(true)}}>Dark mode <FaToggleOn className="fs-5"/></div>}
         </h4>
-
+           {/* close menu button*/}
            <button onClick={() => setShow(false)} className="CloseMenu btn btn-outline-info   fs-5 " id="CloseMenu"> 
             <AiOutlineClose />
            </button>
        </div>
 
-       {/* Modal */}
-       <Modal selected={selected} />
-
      <div className="row mx-2">
      {/* Collections col-1 */}
-     <div className="col-md-10" id="CardsContainer">
+     <div className="col-lg-10" id="CardsContainer">
      <div className={CardContainer}> 
      <h6>{CardsHeadr[1]}</h6>
    <div className={MenuPosters}  >
-     {Svideo.map((Svideo) => <div className={ MenuCards} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}><Posters Svideo={Svideo}/>
+     {Svideo.map((Svideo) => <div className={ MenuCards}  key={Svideo.id} onClick={() => 
+      GetTrailer(Svideo, series, setShowModal(true), setSelected(Svideo))}>
+     <Posters Svideo={Svideo}/>
      </div>)}
     </div>
     {Arrows}
-
+       {/* Scroll arrows */}
+     <div className="text-light" style={{ display:'flex', position:'absolute', 
+     width: '79%', justifyContent:'space-between', top:'301.5px', left:'30px', zIndex: '5',}}>
+     </div>
     {/* Slide images */}
     <MovieSlider Movieslide={Movieslide}/>
  </div> 
@@ -240,7 +246,7 @@ Western  =>  37
  
      </div>
      {/* Genre buttons rendered through GenreBox component  col-2 */}
-     <div className="col-md-2 text-white text-start mt-5" id="MenuHeaders">
+     <div className="col-lg-2 text-white text-start mt-5" id="MenuHeaders">
       <GenreBox GenreBtn={GenreBtn} GetVideo={GetVideo} setGenre={setGenre} 
       setMovieOPtion={setMovieOPtion} setShowFilter={setShowFilter} movieOption={movieOption} 
       GenreArray={GenreArray}/>
@@ -251,15 +257,15 @@ Western  =>  37
           <NavMenu/>
           </div> }
 
-        <div className="m-4  d-flex  justify-content-between  align-items-center">
+        <div className="m-3  d-flex  justify-content-between  align-items-center">
           <div className="logo"><NavBar /></div>
           
          
           <div className="d-flex align-items-center justify-content-between" id="inputMenu">
          
           {/* search input & button */}
-          {movieOption? <form onSubmit={Searcher} className="input-container bg-info rounded  d-flex p-1">
-          <input type="text"
+          {movieOption? <form onSubmit={Searcher} className="input-container bg-info mx-1  d-flex  md-p-1  d-none lg-d-block">
+          <input className="container-fluid bg-light"  type="text"
             placeholder="Search movies"
             value={SearchMovies}
             onChange={(e) => setSearchMovies(e.target.value)}
@@ -276,13 +282,13 @@ Western  =>  37
 
             {/* dark and light mode toggle */}
           <h4>
-          {mode? (<div className=" text-info" onClick={()=> {setMode(false)}}> <BiToggleLeft className="fs-4"/></div>)
-            : <div className=" text-info" onClick={()=> {setMode(true)}}> <BiToggleRight className="fs-4"/></div>}
+          {mode? (<div className=" text-info" onClick={()=> {setMode(false)}}> <MdLightMode className="fs-5"/></div>)
+            : <div className=" text-info" onClick={()=> {setMode(true)}}> <MdModeNight className="fs-5"/></div>}
           </h4>
             
             {/* menu */}
             <Button name={
-              <h3 className="text-info">
+              <h3 className="text-info fs-5">
                 <FaTh onClick={() => setShow(true)} />
               </h3>} />
           </div>
@@ -292,8 +298,8 @@ Western  =>  37
       <main className="">
       
         <div className={Mode} id="main-container">
-        
-          <section className="SideBar  py-3  d-flex justify-content-center col-lg-2 col-md-0 d-none d-lg-block">
+           {/*Side Bar with buttons, col */}
+          <section className="SideBar  py-3  d-flex justify-content-center col-lg-2 col d-none d-lg-block">
             <div className="sideBar-container   d-none  justify-content-start d-lg-block   position-fixed">
             
            {/* Genre buttons rendered through GenreBox component */}
@@ -305,11 +311,11 @@ Western  =>  37
                 
             </div>
           </section>
-
-          <section className="AsideRight   position-relative  justify-content-center col-lg-10  col-sm-12">
+          {/* AsideRight Right side displaying movie cards */}
+          <section className="AsideRight   position-relative  justify-content-center col-lg-10  col">
           
           
-          <figure className="overview mt-2 ">
+          <figure className="overview mt-4 ">
             {/* Modal */}
              <Modal selected={selected} />
 
@@ -320,16 +326,17 @@ Western  =>  37
           </figure>
 
               {/* Moviecard rendering section */}
-              <div className={CardContainer} id="CardContainer">
+              <div className='row' id="CardContainer">
               <h2>{CardsHeadr[1]}</h2>
-              {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, series, setShowModal(true))}>
+              {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, setShowModal(true))}>
                 <MovieCard Svideo={Svideo} />
               </div>))} 
             </div>
             
             {/* Pagination, Prev and Next button/current page  */}
             <div className="d-flex pt-2 pb-5">
-            <Pages setSvideo={setSvideo} selected={selected} genre={genre} Movieslide={Movieslide} MovieType={MovieType} showGenre={''}/>
+            <Pages setSvideo={setSvideo} selected={selected} genre={genre} Movieslide={Movieslide} MovieType={MovieType} 
+            showGenre={''}/>
           </div>
           </section>
         </div>
