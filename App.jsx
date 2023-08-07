@@ -67,7 +67,7 @@ Soap  =>  10766,               Talk  =>  10767,    War & Politics  =>  10768
 Western  =>  37
 */}
   const GenreArray = [28, 16, 12, 27, 99, 10751, 878, 10770, 36, 10402, 35, 18, 10763, 10764, 10749, 10762, 10767, 10766, 10768, 10765];
-  const MovieType = movieOption? 'movie' : 'tv';
+  const MovieType = movieOption === true? 'movie' : 'tv';
   
   const GetVideo = async (SearchMovies) => {  
     const Type = SearchMovies ? "search" : "discover"
@@ -89,7 +89,7 @@ Western  =>  37
   } 
 
 
-  const FetchVideo = async (id) => {
+  const FetchVideo = async (id, MovieType) => {
     const { data } = await axios.get(`${Video_API}/${MovieType}/${id}`, {
       params: {
         api_key: (`${myKey}`),
@@ -194,14 +194,18 @@ Western  =>  37
   const CardsHeadr = ["filter", "COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION", "Nollywood", "Bollywood", "Wrestling", "UFC"];
   const CardStyle = ["CardImg   col-lg-3 col-md-4 col-sm-6"];
   const MenuCards = ["CardImg      mx-2"];
-  const MenuPosters = ["d-flex posters  my-3  Card-Container"];
+  const MenuPosters = ["d-flex posters  my-1  Card-Container"];
   const Arrows = ( <div className="arrows d-flex justify-content-between">
                    <button className="arrows"><h2><BiChevronLeft className="text-danger"/></h2></button>  
                    <button className="arrows"><h2><BiChevronRight className="text-danger"/></h2></button> </div>)
   const DarkMode = ["bg-dark row dark"]
   const LightMode = ["bg-light row light"]
   const Mode = mode?  LightMode : DarkMode
-  const GenreBtn = ["fs  rounded p-2  d-flex d-none  d-lg-flex"]
+  const GenreBtn = ["fs  rounded p-2  d-flex  d-lg-flex"]
+  const SideBar = ["SideBar  py-5  justify-content-center col-lg-2 d-none  d-lg-block"]
+  const SideBar_Menu = ["SideBar_Menu  py-1 justify-content-center  d-lg-none"]
+  const sideBarContainer = ["sideBar-container justify-content-start d-lg-block  position-fixed"]
+  const sideBarContainer_Menu = ["sideBar-container_Menu justify-content-start d-lg-none"]
   const [showFilter, setShowFilter] = useState(false);
 
 
@@ -211,23 +215,128 @@ Western  =>  37
       <header className={mode? HeaderStyly_L : HeaderStyly_D}>
          
         {show&& <div className="Menu-container">
-        <div className="menuHeader px-3   d-flex justify-content-between" > 
-            {/* dark and light mode toggle */}
-          <h4>
-          {mode? (<div className="btn text-info" onClick={()=> {setMode(false)}}>Dark mode <FaToggleOff className="fs-5"/></div>)
-        : <div className="btn text-info" onClick={()=> {setMode(true)}}>Dark mode <FaToggleOn className="fs-5"/></div>}
-        </h4>
+        <div className="menuHeader px-3  py-1  d-flex justify-content-between" > 
+        {/* Genre Options buttons */}
+           <div> <NavBar/> </div>
            {/* close menu button*/}
            <button onClick={() => setShow(false)} className="CloseMenu btn btn-outline-info   fs-5 " id="CloseMenu"> 
             <AiOutlineClose />
            </button>
        </div>
 
+       {/* Menu navigation */}
+
+       <div className="d-flex bg-black">
+       <div className="accordion accordion-flush bg-black" id="accordionFlushExample">
+  
+       <div className="accordion-item bg-black text-info">
+         <h2 className="accordion-header" id="flush-headingTwo">
+           <button onClick={()=> GetVideo(setMovieOPtion(false))}   className="accordion-button collapsed bg-black text-info" type="button" data-bs-toggle="collapse"   data-bs-target={movieOption !==true? "#Tv_series" : "movies"} aria-expanded="false" aria-controls="flush-collapseTwo">
+             Tv series
+           </button>
+         </h2>
+         <div id="Tv_series" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+           <div class="accordion-body bg-dark">
+           {movieOption !== true?
+             <ul className="" aria-labelledby="dropdownMenuButton1">
+               <li><a className="dropdown-item" href="#"> 
+               <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[19]))}>
+               
+               <span className="fs-6 "> Sci-Fi & Fantasy  </span>
+             </div> </a></li>
+     
+             <li><a className="dropdown-item" href="#"> 
+               <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[4]))}>
+               
+               <span className="fs-6 "> Documentary  </span>
+             </div> </a></li>
+     
+             <li><a className="dropdown-item" href="#"> 
+               <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[15]))}>
+               
+               <span className="fs-6 "> Kids  </span>
+             </div> </a></li>
+     
+             <li><a className="dropdown-item" href="#"> 
+               <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[12]))}>
+               
+               <span className="fs-6 "> News  </span>
+             </div> </a></li>
+     
+             <li><a className="dropdown-item" href="#"> 
+               <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[19]))}>
+               
+               <span className="fs-6 "> Reality Tv  </span>
+             </div> </a></li>
+     
+             </ul> : console.log('pls double click on Tv series')
+           }
+             
+           </div>
+         </div>
+       </div>
+       
+     </div>
+     
+     
+     
+           <div className="accordion accordion-flush d-flex bg-black" id="accordionFlushExample">
+       <div className="accordion-item  bg-black">
+         <h2 className="accordion-header" id="flush-headingOne">
+           <button onClick={()=> GetVideo(setMovieOPtion(true))}  className="accordion-button collapsed  bg-black text-info" type="button" data-bs-toggle="collapse" data-bs-target={movieOption? "#Movies" : "#Tv_series"} aria-expanded="false" aria-controls="flush-collapseOne">
+             Movies
+           </button>
+         </h2>
+         <div id="Movies" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+           <div className="accordion-body bg-dark ">
+           {movieOption ?
+             <ul className="" aria-labelledby="">
+     
+           <li><a className="" href="#"> 
+           <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[0]))}>
+           
+           <span className="fs-6 "> Action  </span>
+         </div> </a></li>
+     
+         <li><a className="" href="#"> 
+           <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[8]))}>
+           
+           <span className="fs-6 "> Epic  </span>
+         </div> </a></li>
+     
+         <li><a className="" href="#"> 
+           <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[1]))}>
+           
+           <span className="fs-6 ">  Animation </span>
+         </div> </a></li>
+     
+         <li><a className="" href="#"> 
+           <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[14]))}>
+           
+           <span className="fs-6 "> Romance  </span>
+         </div> </a></li>
+     
+         <li><a className="" href="#"> 
+           <div className={GenreBtn} onClick={() => GetVideo( setGenre( GenreArray[9]))}>
+           
+           <span className="fs-6 "> Musicals  </span>
+         </div> </a></li>
+     
+           </ul> : console.log('pls double click on movies')
+           }
+           </div>
+         </div>
+       </div>
+       
+     </div>
+       </div>
+
      <div className="row mx-2">
      {/* Collections col-1 */}
-     <div className="col-lg-10" id="CardsContainer">
-     <div className={CardContainer}> 
-     <h6>{CardsHeadr[1]}</h6>
+     <div className="" id="CardsContainer">
+     <div className=""> 
+     
+     
    <div className={MenuPosters}  >
      {Svideo.map((Svideo) => <div className={ MenuCards}  key={Svideo.id} onClick={() => 
       GetTrailer(Svideo, series, setShowModal(true), setSelected(Svideo))}>
@@ -239,22 +348,16 @@ Western  =>  37
      <div className="text-light" style={{ display:'flex', position:'absolute', 
      width: '79%', justifyContent:'space-between', top:'301.5px', left:'30px', zIndex: '5',}}>
      </div>
-    {/* Slide images */}
-    <MovieSlider Movieslide={Movieslide}/>
+    
  </div> 
 
  
      </div>
-     {/* Genre buttons rendered through GenreBox component  col-2 */}
-     <div className="col-lg-2 text-white text-start mt-5" id="MenuHeaders">
-      <GenreBox GenreBtn={GenreBtn} GetVideo={GetVideo} setGenre={setGenre} 
-      setMovieOPtion={setMovieOPtion} setShowFilter={setShowFilter} movieOption={movieOption} 
-      GenreArray={GenreArray}/>
-     </div>
+    
      
      </div> 
           
-          <NavMenu/>
+          
           </div> }
 
         <div className="m-3  d-flex  justify-content-between  align-items-center">
@@ -299,11 +402,12 @@ Western  =>  37
       
         <div className={Mode} id="main-container">
            {/*Side Bar with buttons, col */}
-          <section className="SideBar  py-3  d-flex justify-content-center col-lg-2 col d-none d-lg-block">
-            <div className="sideBar-container   d-none  justify-content-start d-lg-block   position-fixed">
+          <section className={SideBar}>
+            <div className={sideBarContainer}>
             
            {/* Genre buttons rendered through GenreBox component */}
           <div className="col-md-4 text-white text-start" id="MenuHeaders">
+          
           <GenreBox GenreBtn={GenreBtn} GetVideo={GetVideo} setGenre={setGenre} 
           setMovieOPtion={setMovieOPtion} setShowFilter={setShowFilter} movieOption={movieOption} 
           GenreArray={GenreArray}/>
@@ -327,7 +431,7 @@ Western  =>  37
 
               {/* Moviecard rendering section */}
               <div className='row' id="CardContainer">
-              <h2>{CardsHeadr[1]}</h2>
+              
               {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, setShowModal(true))}>
                 <MovieCard Svideo={Svideo} />
               </div>))} 
