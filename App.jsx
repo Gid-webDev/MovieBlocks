@@ -29,7 +29,6 @@ import GenreBox from "./GenreBox";
 const myKey = '70aeaf6cc2f0f2330bec04f30130925d'
 
 const App = () => {
-
   const Video_API = "https://api.themoviedb.org/3";
   const images = "https://image.tmdb.org/t/p/original"
 
@@ -43,7 +42,7 @@ const App = () => {
   const [show, setShow] = useState(false);
   const [type, setType] = useState(true);
   const [Movieslide, setMovieslide] = useState([]);
-  const [mode, setMode] = useState(false);
+  const [mode, setMode] = useState(true);
   const [movieOption, setMovieOPtion] = useState(true);
   const [genre, setGenre] = useState([0]);
  
@@ -73,7 +72,7 @@ Western  =>  37
     const Type = SearchMovies ? "search" : "discover"
     const { data: { results } } = await axios.get(`${Video_API}/${Type}/${MovieType}`, {
       params: {
-        page: (`${currentPage}`),
+        page: 1,
         api_key: (`${myKey}`),
         with_genres: genre,
         query: SearchMovies
@@ -85,12 +84,11 @@ Western  =>  37
     GetTrailer(results[0]);
     setType(true);
     setMovieslide(results);
-    console.log(genre)
+    
   } 
-
-
-  const FetchVideo = async (id, MovieType) => {
-    const { data } = await axios.get(`${Video_API}/${MovieType}/${id}`, {
+  const FetchVideo = async (id) => {
+    const MovieType = movieOption === true? 'movie' : 'tv';
+    const data  = await axios.get(`${Video_API}/${MovieType}/${id}`, {
       params: {
         api_key: (`${myKey}`),
         append_to_response: 'videos'
@@ -98,10 +96,8 @@ Western  =>  37
     })
     return data
   }
-
-
   const GetTrailer = async (Svideo, slide) => {
-    const data = await FetchVideo(Svideo.id)
+    const {data} = await FetchVideo(Svideo.id)
     setSelected(data, Svideo, slide)
     setPlayer(false)
     console.log(data)
@@ -113,9 +109,9 @@ Western  =>  37
   }, []);
 
 
-  const Searcher = (e) => {
-    e.preventDefault();
+  const Searcher = (e) => { e.preventDefault();
     setPlayer(false)
+    GetVideo()
   }
 
   const RenderTrailer = () => {
@@ -184,13 +180,12 @@ Western  =>  37
     );
   }
 
-/* Dark Mode for cards */
-  const CardContainer_D = [" sect text-light py-3  row w-100"];
-  /* Light Mode for cards */
-  const CardContainer_L = [" sect text-light py-3 bg-light row w-100"];
+
+  const CardContainer_D = [/* Dark Mode for cards */ "sect text-light py-3  row w-100"];
+  const CardContainer_L = [/* Light Mode for cards */ " sect text-light py-3 bg-light row w-100"];
   mode? CardContainer_L : CardContainer_D
-  const HeaderStyly_D = [" text-secondary py-0 fixed-top bg-black"]
-  const HeaderStyly_L = [" text-secondary py-0 fixed-top bg-white"];
+  const HeaderStyly_D = [/* Dark Mode for cards */ "text-secondary py-0 fixed-top bg-black"]
+  const HeaderStyly_L = [/* Light Mode for cards */ "text-secondary py-0 fixed-top bg-white"];
   const CardsHeadr = ["filter", "COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION", "Nollywood", "Bollywood", "Wrestling", "UFC"];
   const CardStyle = ["CardImg   col-lg-3 col-md-4 col-sm-6"];
   const MenuCards = ["CardImg      mx-2"];
@@ -207,6 +202,8 @@ Western  =>  37
   const sideBarContainer = ["sideBar-container justify-content-start d-lg-block  position-fixed"]
   const sideBarContainer_Menu = ["sideBar-container_Menu justify-content-start d-lg-none"]
   const [showFilter, setShowFilter] = useState(false);
+  const formStyle = [ "input-container bg-info mx-1  d-flex  md-p-1  d-sm-flex d-none"]
+  const InputContainer = ["d-flex align-items-center justify-content-between", ]
 
 
 
@@ -364,27 +361,24 @@ Western  =>  37
           <div className="logo"><NavBar /></div>
           
          
-          <div className="d-flex align-items-center justify-content-between" id="inputMenu">
-         
-          {/* search input & button */}
-          {movieOption? <form onSubmit={Searcher} className="input-container bg-info mx-1  d-flex  md-p-1  d-none lg-d-block">
+          <div /* search input & button */ className={InputContainer} id="inputMenu">
+          {movieOption? (
+            <form onSubmit={Searcher} className={formStyle} style={{boxShadow:'0 2px 2px'}}> 
           <input className="container-fluid bg-light"  type="text"
             placeholder="Search movies"
             value={SearchMovies}
             onChange={(e) => setSearchMovies(e.target.value)}
           />
-          <button className="btn" onClick={() => GetVideo(movieOption !== true? console.log("can't search") : SearchMovies)}>
+          <button className="btn" onClick={() => GetVideo(SearchMovies)}>
             <BsSearch type="submit" />
           </button>
 
-        </form>  :  <Button name={
-          <div className='disabled text-light' onClick={''}>
-            
-            <span className="fs-6 " > Search disabled </span>
-          </div>} />  }
+        </form>
 
-            {/* dark and light mode toggle */}
-          <h4>
+          ) :  <Button name={
+          <div className='text-light' onClick={''}> </div>} />  }
+              
+          <h4 /* dark and light mode toggle */>
           {mode? (<div className=" text-info" onClick={()=> {setMode(false)}}> <MdLightMode className="fs-5"/></div>)
             : <div className=" text-info" onClick={()=> {setMode(true)}}> <MdModeNight className="fs-5"/></div>}
           </h4>
@@ -416,19 +410,14 @@ Western  =>  37
             </div>
           </section>
           {/* AsideRight Right side displaying movie cards */}
-          <section className="AsideRight   position-relative  justify-content-center col-lg-10  col">
+          <section className="AsideRight   position-relative  justify-content-center col-lg-10 my-4 col">
           
-          
-          <figure className="overview mt-4 ">
+          <figure className="overview my-0 ">
             {/* Modal */}
              <Modal selected={selected} />
-
              {/* Rendering slides images */}
-             <MovieSlider Movieslide={Movieslide}/>
-
-             
+             <MovieSlider Movieslide={Movieslide}/>  
           </figure>
-
               {/* Moviecard rendering section */}
               <div className='row' id="CardContainer">
               

@@ -17,11 +17,6 @@ function MovieSlider({Movieslide}) {
     const slideImage =  currSlide?  ({ backgroundImage:  `url('${images}${Movieslide[currSlide].backdrop_path}') `})  : 
    (null)
 
-    
-    
-          
-        
-
     function Prev (){
         const FirstSlide = currSlide === 0
         const NewSlide =  FirstSlide?  Movieslide.length - 1 : currSlide - 1
@@ -48,14 +43,12 @@ function MovieSlider({Movieslide}) {
   return (
     <div>
     <section>
-       <h2 className='text-light text-start py-1 px-1  Trending-today'>
-       Trending now</h2>
-        <figure id='slideImage' style={slideImage}> 
-        
-
+       <h2 className='text-light text-start py-1 px-4 bg-info  Trending-today'>
+         Trending now
+       </h2>
+        <figure id='slideImage' style={{...slideImage, }}> 
         <div className="container position-absolute  left-0  text-white   text-left">
           {/* dark overlay background for slides */}
-          
           </div>
         <div className={SlidesBtns}>
         {currSlide? <div className='container position-absolute  px-4' id='MovieDetails'>
