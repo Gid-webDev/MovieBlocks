@@ -330,12 +330,11 @@ input{
 
 .Cards:hover{
   overflow: hidden;
-  transform: translateY(-10px);
-  transition: 0.8s;
-  box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.3);
+  transform: translateY(-12px);
+  transition: 0.7s;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   border-radius: 20px;
-  scale: 1.04;
 }
 
 .Mcontainer{

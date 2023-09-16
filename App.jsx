@@ -20,6 +20,7 @@ import MovieSlider from "./MovieSlider";
 import Pages from "./Pages";
 import {MdModeNight, MdLightMode} from "react-icons/md";
 import GenreBox from "./GenreBox";
+import SearchArea from "./SearchArea";
 
 
 
@@ -84,7 +85,7 @@ Western  =>  37
     GetTrailer(results[0]);
     setType(true);
     setMovieslide(results);
-    
+    setSearchMovies('')
   } 
   const FetchVideo = async (id) => {
     const MovieType = movieOption === true? 'movie' : 'tv';
@@ -141,7 +142,7 @@ Western  =>  37
   const Modal = ({ selected }) => {
     return (
       <div className=" Mcontainer">
-        {showModal && <div className="Modal text-dark   card  bg-light position-fixed">
+        {showModal && <div className="Modal text-dark   card  bg-light position-fixed my-1">
           <ModalHeader >
             <button className="CloseModal text-dark" onClick={() => setShowModal(false)}>
               <AiOutlineClose />
@@ -202,11 +203,19 @@ Western  =>  37
   const sideBarContainer = ["sideBar-container justify-content-start d-lg-block  position-fixed"]
   const sideBarContainer_Menu = ["sideBar-container_Menu justify-content-start d-lg-none"]
   const [showFilter, setShowFilter] = useState(false);
-  const formStyle = [ "input-container bg-info mx-1  d-flex  md-p-1  d-sm-flex d-none"]
-  const InputContainer = ["d-flex align-items-center justify-content-between", ]
+  const [showInput, setShowInput] = useState(false);
+  const NavContainer = ["d-flex align-items-center justify-content-between", ]
+  /* large screen size Search / input accessories */
+  const formStyleClassBig = ["input-container shadow bg-light mx-3  d-flex  d-lg-flex d-none"]
+  const formStyle2 = {boxShadow:'0 2px 2px', maxWidth:'50vw'}
+  const InputClassBig = ["container-fluid"]
+  /* small screen search/input accessories */
+  const formStyleClassSmall = ["d-lg-none rounded mx-2 bg-light position-fixed"]
+  const formStyleSmall = {position:'absolute', width:'60%', zIndex:'5', boxShadow:' 0 1px 2px', 
+  display:'flex', flex:'1', right:'0', border:'solid #111 0.8px'}
+  const inputStyleSmall = ["container-fluid bg-light text-dark d-flex flex-1 rounded"]
 
-
-
+  
   return (
     <>
       <header className={mode? HeaderStyly_L : HeaderStyly_D}>
@@ -286,7 +295,7 @@ Western  =>  37
          </h2>
          <div id="Movies" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
            <div className="accordion-body bg-dark ">
-           {movieOption ?
+           {movieOption === true?
              <ul className="" aria-labelledby="">
      
            <li><a className="" href="#"> 
@@ -358,26 +367,28 @@ Western  =>  37
           </div> }
 
         <div className="m-3  d-flex  justify-content-between  align-items-center">
-          <div className="logo"><NavBar /></div>
+          <div className="logo" onClick={()=>{setShowInput(false)}}>
+            <NavBar />
+          </div>
           
-         
-          <div /* search input & button */ className={InputContainer} id="inputMenu">
-          {movieOption? (
-            <form onSubmit={Searcher} className={formStyle} style={{boxShadow:'0 2px 2px'}}> 
-          <input className="container-fluid bg-light"  type="text"
-            placeholder="Search movies"
-            value={SearchMovies}
-            onChange={(e) => setSearchMovies(e.target.value)}
-          />
-          <button className="btn" onClick={() => GetVideo(SearchMovies)}>
-            <BsSearch type="submit" />
-          </button>
+          {showInput === true? (
+               ''
+            ) : (
+              <div /* button for showing search accessories for small and size screens */ 
+               className="btn text-info d-lg-none " onClick={() => setShowInput(true) }
+               style={{position:'absolute', right:'85px',}}>
+               <BsSearch type="submit"/>
+          </div>
+            )}
 
-        </form>
+          <div  className={NavContainer}>
+          {/* search large screens input & button */ }
+            <SearchArea SearchMovies={SearchMovies} setSearchMovies={setSearchMovies} movieOption={movieOption}
+             setMovieOPtion={setMovieOPtion} Searcher={Searcher} GetVideo={GetVideo} 
+             InputClassBig={InputClassBig}  formStyle2={formStyle2} formStyleClassBig={formStyleClassBig}
+             showInput={showInput} setShowInput={setShowInput}
+            /> 
 
-          ) :  <Button name={
-          <div className='text-light' onClick={''}> </div>} />  }
-              
           <h4 /* dark and light mode toggle */>
           {mode? (<div className=" text-info" onClick={()=> {setMode(false)}}> <MdLightMode className="fs-5"/></div>)
             : <div className=" text-info" onClick={()=> {setMode(true)}}> <MdModeNight className="fs-5"/></div>}
@@ -409,17 +420,27 @@ Western  =>  37
                 
             </div>
           </section>
-          {/* AsideRight Right side displaying movie cards */}
+          {/* AsideRight Right side displaying movie cards */} 
           <section className="AsideRight   position-relative  justify-content-center col-lg-10 my-4 col">
+           
+           {/* show search input and button for small to medium screen size*/
+             showInput === true? <SearchArea SearchMovies={SearchMovies} setSearchMovies={setSearchMovies} movieOption={movieOption}
+             setMovieOPtion={setMovieOPtion} showInput={showInput} setShowInput={setShowInput} Searcher={Searcher}
+             GetVideo={GetVideo} formStyleClassSmall={formStyleClassSmall} formStyleSmall={formStyleSmall}
+             inputStyleSmall={inputStyleSmall}
+            /> : ''
+          }
+            
           
-          <figure className="overview my-0 ">
+
+           <figure className="overview my-0 " onClick={()=>{setShowInput(false)}}>
             {/* Modal */}
              <Modal selected={selected} />
              {/* Rendering slides images */}
              <MovieSlider Movieslide={Movieslide}/>  
           </figure>
               {/* Moviecard rendering section */}
-              <div className='row' id="CardContainer">
+              <div className='row' id="CardContainer" onClick={()=>{setShowInput(false)}}>
               
               {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, setShowModal(true))}>
                 <MovieCard Svideo={Svideo} />
@@ -427,7 +448,7 @@ Western  =>  37
             </div>
             
             {/* Pagination, Prev and Next button/current page  */}
-            <div className="d-flex pt-2 pb-5">
+            <div className="d-flex pt-2 pb-5" onClick={()=>{setShowInput(false)}}>
             <Pages setSvideo={setSvideo} selected={selected} genre={genre} Movieslide={Movieslide} MovieType={MovieType} 
             showGenre={''}/>
           </div>
@@ -435,7 +456,7 @@ Western  =>  37
         </div>
       </main>
 
-      <footer className="bg-dark">
+      <footer className="bg-dark" onClick={()=>{setShowInput(false)}}>
       </footer>
 
 

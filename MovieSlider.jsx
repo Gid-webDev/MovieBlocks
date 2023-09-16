@@ -52,10 +52,10 @@ function MovieSlider({Movieslide}) {
           </div>
         <div className={SlidesBtns}>
         {currSlide? <div className='container position-absolute  px-4' id='MovieDetails'>
-        <h1> {Movieslide[currSlide].title } </h1>
-        <p>{Movieslide[currSlide].overview }</p>
-        <h5>Release date: {Movieslide[currSlide].release_date} &nbsp; &nbsp; Votes: <span className=' rating fs-5'>{Movieslide[currSlide].vote_average}</span> 
-          </h5>
+        <div className='fw-bold fs-1'> {Movieslide[currSlide].title } </div>
+        <h6>Release date: {Movieslide[currSlide].release_date} <br/>
+         Votes: <span className=' rating fs-5'>{Movieslide[currSlide].vote_average}</span> 
+          </h6>
         </div> : null}
         
            <div id="btn" onClick={Prev}> <BiChevronLeft/></div>
