@@ -94,6 +94,7 @@ const App = () => {
   
   useEffect(() => {
   GetVideo();
+  
   }, []);
 
   
@@ -130,7 +131,8 @@ const App = () => {
   const Modal = ({ selected }) => {
     return (
       <div className=" Mcontainer">
-        {showModal && <div className="Modal text-dark   card  bg-light position-fixed my-1">
+        {showModal && <div style={{boxShadow:'0px 10px 10px'}}
+           className="Modal text-dark   card  bg-light position-fixed my-1">
           <ModalHeader >
             <button className="CloseModal text-dark" onClick={() => setShowModal(false)}>
               <AiOutlineClose />
@@ -206,11 +208,12 @@ const App = () => {
   /* TV SERIES AND MOVIES GENRE (Option)LOGIC */
   const thisGenre = movieOption === true? myGenre.NewMoviesGenre : myGenre.NewTvGenre
   /*  STYLES FOR GENRES INSIDE THE MENU */
-  const MoviesAndTv = {fontSize:'22px', cursor:'pointer', border:'solid 3px #202020', padding:'8px 24px'}
+  const MoviesAndTv = {fontSize:'17px', cursor:'pointer', border:'solid 3px #202020', padding:'8px 26px'}
+  const categoryandGenreStyle = ("text-info px-1")
+  const categoryOptions = movieOption === true? 'Movies' : 'TV Series'
+  const [genreName, setGenreName] = useState('')
 
-  const [ genreName, setGenreName] = useState()
-
- 
+  
   
   return (
     <>
@@ -225,11 +228,18 @@ const App = () => {
             <AiOutlineClose />
            </button>
        </div>
-
-     <div className="row mx-2">
-      
+     <div className="d-flex justify-content-around">
+     <h6 > 
+        CATEGORY: <span className={categoryandGenreStyle}>{categoryOptions}</span>  
+     </h6>
+      <h6>
+      GENRE: <span className={categoryandGenreStyle}> {genreName} </span>
+      </h6>  
+    
+     </div>
+  <div className="row mx-2">
    <div id="CardsContainer">
-     <h2></h2>
+     
    <div className={MenuPosters}  >
      {Svideo.map((Svideo) => <div className={ MenuCards}  key={Svideo.id} onClick={() => 
       GetTrailer(Svideo, series, setShowModal(true), setSelected(Svideo))}>
@@ -241,17 +251,17 @@ const App = () => {
      
      </div> 
      <section /* GENRES FOR MOVIES AND TV SERIES INSIDE THE MENU */ >
-         <div className="d-flex justify-content-between w-25 my-2 mx-3"> 
-            <div style={MoviesAndTv} onClick={()=> setMovieOPtion(true)}> Movies</div> 
-            <div style={MoviesAndTv} onClick={()=> setMovieOPtion(false)}> Tvserie</div> 
+         <div className="d-flex W-50 my-2 mx-3"> 
+            <div style={MoviesAndTv} id="MoviesAndTv" onClick={()=> GetVideo(setMovieOPtion(true))}> MOVIES</div> 
+            <div style={MoviesAndTv} id="MoviesAndTv" onClick={()=> GetVideo(setMovieOPtion(false))}> TV SERIES</div> 
          </div>
          <div className="px-3">
          {  
-          thisGenre.map((genreIndex)=> (
-          <button className="m-1 btn btn-outline-info"  key={genreIndex.id} onClick={()=> 
-            GetVideo(setGenre(genreIndex.id))}>
+          thisGenre.map( (genreIndex, genreId,)=> (genreId, 
+          <button className="m-1 btn btn-outline-info"  key={genreIndex.id} 
+          onClick={()=>  GetVideo(setGenre(genreIndex.id), setGenreName(genreIndex.name))}>
            {genreIndex.name}
-          </button>))}
+          </button> ))}
          </div> 
      </section>
           
@@ -314,8 +324,8 @@ const App = () => {
           <div className="col-md-4 text-white text-start" id="MenuHeaders">
           
           <GenreBox GenreBtn={GenreBtn} GetVideo={GetVideo} setGenre={setGenre} 
-          setMovieOPtion={setMovieOPtion} setShowFilter={setShowFilter} movieOption={movieOption} 
-          GenreArray={GenreArray}/>
+          setMovieOPtion={setMovieOPtion} movieOption={movieOption} 
+          GenreArray={GenreArray} thisGenre={thisGenre} setGenreName={setGenreName} />
         </div>
                 
             </div>
@@ -327,7 +337,8 @@ const App = () => {
             {/* Modal */}
              <Modal selected={selected} />
              {/* Rendering slides images */}
-             <MovieSlider Movieslide={Movieslide} />  
+             <MovieSlider Movieslide={Movieslide} categoryOptions={categoryOptions}
+               mode={mode} movieOption={movieOption} genreName={genreName} />  
           </figure>
               {/* Moviecard rendering section */}
               <div className='row' id="CardContainer" onClick={()=>{setShowInput(false)}}>

@@ -1,22 +1,32 @@
 import React, {useEffect, useRef, useState } from 'react'
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi"
-import {FaPlay} from "react-icons/fa"
-import MovieCard from './MovieCard';
 
 
 
   
     const images = "https://image.tmdb.org/t/p/original"
-
-
-
-function MovieSlider({Movieslide}) {
+function MovieSlider({Movieslide, categoryOptions,  mode, movieOption, genreName}) {
     const timeRef = useRef(null);
     const [currSlide, setCurrSlide] = useState(0)
+
+    const DarkMode = {color:'#000'}
+    const LightMode = {color:'#fff'}
+    const genreColor = mode === true? {color:'white'} : 
+    {color:'rgba(0, 202, 255, 0.95)'}
+    /* MOVIE & TV HEADER STYLES */
+    const Mode = mode ===true? LightMode : DarkMode
+    const movieHeader= ()=> ({
+      ...Mode, textTransform:'capitalize', display:'flex', alignItems:'center',
+    })
+    const genreNameStyle =()=>({
+      ...genreColor, backgroundColor:'#111', borderRadius:'20px', padding:'0px 14px', 
+       fontSize:'17px',
+    })
     const SlidesBtns = ["text-light d-flex justify-content-between px-3 position-relative Slides_Btns"]
-    const MovieSlideStyles = { backgroundSize:'cover ', backgroundPosition:'top',
-    
-  }
+    const getContainerSlide = () => ({
+      overflow:'hidden', height:'420px', display:'flex', width:'100%', position:'relative', boxShadow:'0px 10px 10px'
+  })
+  const MovieSlideStyles = { backgroundSize:'cover ', backgroundPosition:'top', }
     const getMovieSlideStyles = ( MovieSlideIndex) =>  ({
       ...MovieSlideStyles,
      backgroundImage:  `url('${images}${Movieslide[MovieSlideIndex].backdrop_path}') `,
@@ -33,14 +43,14 @@ function MovieSlider({Movieslide}) {
 
 
     function Prev (){
-      const LastSlide = currSlide === Movieslide.length - 1
-        const NewSlide = LastSlide?  0  : currSlide + 1
+      const FirstSlide = currSlide === 0
+        const NewSlide =  FirstSlide?  Movieslide.length - 1 : currSlide - 1
         setCurrSlide(NewSlide)
       }
       
       function Next () {
-        const FirstSlide = currSlide === 0
-        const NewSlide =  FirstSlide?  Movieslide.length - 1 : currSlide - 1
+        const LastSlide = currSlide === Movieslide.length - 1
+        const NewSlide = LastSlide?  0  : currSlide + 1
         setCurrSlide(NewSlide)
       }
 
@@ -58,20 +68,33 @@ function MovieSlider({Movieslide}) {
   return (
     <div>
     <section>
-       <h2 className='text-light text-start py-1 px-4 bg-info  Trending-today'>
-         Trending now
-       </h2>
-        <div style={{overflow:'hidden', height:'420px', display:'flex', width:'100%', position:'relative'}}>
+       <h3 style={movieHeader()} className='text-start py-1 px-4 bg-info'>
+         {genreName? (
+         <div>
+            <span style={{padding:'2px 14px'}} >{categoryOptions}</span> 
+         <span style={genreNameStyle()}>{genreName}</span> 
+         </div>
+         ) : ( 'Trending Now') }
+          
+       </h3>
+        <div style={getContainerSlide()}>
 
         <figure id='slideImage' style={getMovieSlideContainerStyles()}> 
         {Movieslide.map((movieForEach, MovieSlideIndex)=> (<div key={Movieslide.id} 
           style={getMovieSlideStyles( MovieSlideIndex)}> 
-          <div id='movieName'  className='fw-bold fs-1 px-4 text-light text-start position-absolute'>{Movieslide[MovieSlideIndex].title }</div>  </div>))
+          <p id='movieName' style={{backgroundColor:'rgba(175, 175, 175, 0.5)'}}
+          className='fw-bold fs-1 px-4   text-start position-absolute'>
+          {movieOption? Movieslide[MovieSlideIndex].original_title
+            : 
+            Movieslide[MovieSlideIndex].original_name
+          } 
+          </p> 
+   </div>))
         }
     </figure>
     <div className={SlidesBtns}>
-           <div id="btn" onClick={Prev}> <BiChevronLeft/></div>
-           <div id="btn" onClick={Next}> <BiChevronRight/></div>
+           <div id="btn" onClick={Next}> <BiChevronLeft/></div>
+           <div id="btn" onClick={Prev}> <BiChevronRight/></div>
          </div>
         </div>
 
