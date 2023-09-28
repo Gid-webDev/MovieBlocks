@@ -32,7 +32,7 @@ const Pages = ({setSvideo, selected, movieOption, MovieType, showGenre, Svideo})
     },[currentPage])
 
     return(
-        <div className="pagesBtn d-flex bg-info p-1 rounded m-2">
+        <div className="pagesBtn d-flex bg-info p-1 rounded m-2" style={{scale:'0.75'}}>
         {currentPage !== 1? <div className="Page" id="PrevPage"  onClick={() => setCurrentPage((PrevPage)=> PrevPage - 1 )}> 
         <BsArrowLeftShort/> Prev</div> 
     :  null}

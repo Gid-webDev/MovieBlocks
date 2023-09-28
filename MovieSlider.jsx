@@ -5,7 +5,7 @@ import { BiChevronLeft, BiChevronRight } from "react-icons/bi"
 
   
     const images = "https://image.tmdb.org/t/p/original"
-function MovieSlider({Movieslide, categoryOptions,  mode, movieOption, genreName}) {
+function MovieSlider({Movieslide, setMovieName, movieName,  mode, movieOption, genreName}) {
     const timeRef = useRef(null);
     const [currSlide, setCurrSlide] = useState(0)
 
@@ -24,7 +24,7 @@ function MovieSlider({Movieslide, categoryOptions,  mode, movieOption, genreName
     })
     const SlidesBtns = ["text-light d-flex justify-content-between px-3 position-relative Slides_Btns"]
     const getContainerSlide = () => ({
-      overflow:'hidden', height:'420px', display:'flex', width:'100%', position:'relative', boxShadow:'0px 10px 10px'
+      overflow:'hidden', height:'420px', display:'flex', width:'100%', position:'relative', boxShadow:'3px 3px 3px'
   })
   const MovieSlideStyles = { backgroundSize:'cover ', backgroundPosition:'top', }
     const getMovieSlideStyles = ( MovieSlideIndex) =>  ({
@@ -68,27 +68,23 @@ function MovieSlider({Movieslide, categoryOptions,  mode, movieOption, genreName
   return (
     <div>
     <section>
-       <h3 style={movieHeader()} className='text-start py-1 px-4 bg-info'>
-         {genreName? (
-         <div>
-            <span style={{padding:'2px 14px'}} >{categoryOptions}</span> 
-         <span style={genreNameStyle()}>{genreName}</span> 
-         </div>
-         ) : ( 'Trending Now') }
-          
-       </h3>
         <div style={getContainerSlide()}>
 
         <figure id='slideImage' style={getMovieSlideContainerStyles()}> 
         {Movieslide.map((movieForEach, MovieSlideIndex)=> (<div key={Movieslide.id} 
-          style={getMovieSlideStyles( MovieSlideIndex)}> 
-          <p id='movieName' style={{backgroundColor:'rgba(175, 175, 175, 0.5)'}}
-          className='fw-bold fs-1 px-4   text-start position-absolute'>
-          {movieOption? Movieslide[MovieSlideIndex].original_title
-            : 
-            Movieslide[MovieSlideIndex].original_name
-          } 
-          </p> 
+          style={getMovieSlideStyles( MovieSlideIndex)} onLoad={()=> setMovieName(movieForEach.name)}> 
+          <div id='movieName' style={{bottom:'0px'}}
+          className='fw-bold fs-1 w-100   text-start position-absolute'>
+          <div id='slideInfo' className={mode ===true? 'text-light bg-dark py-1 px-4' : 'text-dark bg-light py-1 px-4'}>
+               <p className='fs-2'>
+                 {movieOption? (Movieslide[MovieSlideIndex].original_title) :
+                  Movieslide[MovieSlideIndex].original_name
+                } 
+               </p>    
+          </div>
+                  
+
+          </div> 
    </div>))
         }
     </figure>
