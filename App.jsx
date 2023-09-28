@@ -178,9 +178,9 @@ const App = () => {
   const HeaderStyly_D = [/* Dark Mode for cards */ "text-secondary py-0 fixed-top bg-black"]
   const HeaderStyly_L = [/* Light Mode for cards */ "text-secondary py-0 fixed-top bg-white"];
   const CardsHeadr = ["filter", "COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION", "Nollywood", "Bollywood", "Wrestling", "UFC"];
-  const CardStyle = ["CardImg   col-lg-3 col-md-4 col-sm-6"];
-  const MenuCards = ["CardImg      mx-2"];
-  const MenuPosters = ["d-flex posters  my-1  Card-Container"];
+  const CardStyle = ["CardImg "];
+  const MenuCards = ["CardImg   mx-2"];
+  const MenuPosters = ["my-1  Card-Container"];
   const Arrows = ( <div className="arrows d-flex justify-content-between">
                    <button className="arrows"><h2><BiChevronLeft className="text-danger"/></h2></button>  
                    <button className="arrows"><h2><BiChevronRight className="text-danger"/></h2></button> </div>)
@@ -196,22 +196,24 @@ const App = () => {
   const [showInput, setShowInput] = useState(false);
   const NavContainer = ["d-flex align-items-center justify-content-between", ]
   /* large screen size Search / input accessories */
-  const formStyleClassBig = ["input-container shadow bg-light mx-3  d-flex  d-lg-flex d-none"]
-  const formStyle2 = {boxShadow:'0 2px 2px', maxWidth:'50vw'}
+  const formStyleClassBig = ["input-container shadow bg-light mx-3  d-flex px-2 d-lg-flex d-none"]
+  const formStyle2 = {boxShadow:'0 2px 2px', maxWidth:'60vw'}
   const InputClassBig = ["container-fluid"]
   /* small screen search/input accessories */
   const formStyleClassSmall = ["d-lg-none rounded mx-2 bg-light position-fixed"]
-  const formStyleSmall = {position:'absolute', width:'55%', zIndex:'5', boxShadow:' 0 1px 2px', 
-  display:'flex', flex:'1', right:'0', border:'solid #111 0.6px', top:'60px', transform:'translatey(15px)',
+  const formStyleSmall = {position:'absolute', width:'65%', zIndex:'5', boxShadow:'1px 0px 2px 2px rgba(0, 0, 0)', 
+  display:'flex', flex:'1', right:'0', top:'60px', transform:'translatey(15px)', padding:'4px 0',
   transition:'transform ease-out 0.5s' }
   const inputStyleSmall = ["container-fluid bg-light text-dark d-flex flex-1 rounded"]
   /* TV SERIES AND MOVIES GENRE (Option)LOGIC */
   const thisGenre = movieOption === true? myGenre.NewMoviesGenre : myGenre.NewTvGenre
   /*  STYLES FOR GENRES INSIDE THE MENU */
-  const MoviesAndTv = {fontSize:'17px', cursor:'pointer', border:'solid 3px #202020', padding:'8px 26px'}
+  const MoviesAndTv = {fontSize:'13px', cursor:'pointer', border:'solid 3px #202020', padding:'8px 22px'}
   const categoryandGenreStyle = ("text-info px-1")
-  const categoryOptions = movieOption === true? 'Movies' : 'TV Series'
+  const categoryOptions = movieOption === true? 'MOVIES' : 'TV Series'
   const [genreName, setGenreName] = useState('')
+ 
+  
 
   
   
@@ -219,51 +221,62 @@ const App = () => {
     <>
       <header className={mode? HeaderStyly_L : HeaderStyly_D}>
          
-        {show&& <div className="Menu-container">
+        {show&& <div className="Menu-container px-3" style={{overflowY:'hidden', height:'100vh'}}>
         <div className="menuHeader px-3  py-1  d-flex justify-content-between" > 
         {/* Genre Options buttons */}
            <div> <NavBar/> </div>
            {/* close menu button*/}
-           <button onClick={() => setShow(false)} className="CloseMenu btn btn-outline-info   fs-5 " id="CloseMenu"> 
+           <div onClick={() => setShow(false)} className="CloseMenu text-info  fs-5 "
+             style={{cursor:'pointer'}}> 
             <AiOutlineClose />
-           </button>
+           </div>
        </div>
-     <div className="d-flex justify-content-around">
+     <div className="d-flex justify-content-around py-2">
      <h6 > 
-        CATEGORY: <span className={categoryandGenreStyle}>{categoryOptions}</span>  
+        CATEGORY <span className="bg-light">
+        <div className="d-flex my-2 px-2 position-relative "> 
+          <div style={MoviesAndTv} id="MoviesAndTv" onClick={()=> GetVideo(setMovieOPtion(true))}> MOVIES</div> 
+          <div style={MoviesAndTv} id="MoviesAndTv" onClick={()=> GetVideo(setMovieOPtion(false))}> TV SERIES</div> 
+     </div>
+        </span>  
      </h6>
       <h6>
       GENRE: <span className={categoryandGenreStyle}> {genreName} </span>
       </h6>  
-    
      </div>
-  <div className="row mx-2">
-   <div id="CardsContainer">
-     
-   <div className={MenuPosters}  >
-     {Svideo.map((Svideo) => <div className={ MenuCards}  key={Svideo.id} onClick={() => 
-      GetTrailer(Svideo, series, setShowModal(true), setSelected(Svideo))}>
-     <Posters Svideo={Svideo}/>
-     </div>)}
+     <div className=" row g-0 w-100 py-3"  style={{height:'80vh', overflow:'hidden'}}>
+     <section /* GENRES FOR MOVIES AND TV SERIES INSIDE THE MENU */  
+     className="col-md-6">
+     <ul className="px-0 row mx-1 " 
+     style={{justifyContent:'center', display:'flex', height:'80vh', overflowY:'auto', overflowX:'hidden'}} id="menuGenre"> 
+     {  
+      thisGenre.map( (genreIndex, genreId,)=> (genreId, 
+      <li className="m-1 text-start col-lg-6 fs-6" 
+      style={{placeContent:'center', placeItems:'center', listStyle:'none'}} 
+      key={genreIndex.id} 
+      onClick={()=>  GetVideo(setGenre(genreIndex.id), setGenreName(genreIndex.name))}>
+       {genreIndex.name} <hr/>
+      </li> ))}
+     </ul> 
+ </section>
+
+ <section /* MENU WITH MOVIE CARDS RENDERED */ className=" col-md-6 d-md-block d-none py-3"
+ style={{overflow:'auto', height:'80vh'}} id="menuGenre">
+  <div > 
+    <div className={MenuPosters} >
+        {Svideo.map((Svideo) => <div className={ MenuCards}  
+        style={{border:'solid #ddd 0px', scale:'0.85', cursor:'pointer',
+        boxShadow:'1px 1px 3px 1px rgba(255, 255, 255, 0.4)'}}
+        key={Svideo.id} onClick={() => 
+        GetTrailer(Svideo, series, setShowModal(true), setSelected(Svideo))}>
+       <Posters Svideo={Svideo} genreName={genreName} categoryOptions={categoryOptions} />
+      </div>)}
     </div>   
-    </div>
-    
+  </div>     
+  </section>
+ </div>
+   
      
-     </div> 
-     <section /* GENRES FOR MOVIES AND TV SERIES INSIDE THE MENU */ >
-         <div className="d-flex W-50 my-2 mx-3"> 
-            <div style={MoviesAndTv} id="MoviesAndTv" onClick={()=> GetVideo(setMovieOPtion(true))}> MOVIES</div> 
-            <div style={MoviesAndTv} id="MoviesAndTv" onClick={()=> GetVideo(setMovieOPtion(false))}> TV SERIES</div> 
-         </div>
-         <div className="px-3">
-         {  
-          thisGenre.map( (genreIndex, genreId,)=> (genreId, 
-          <button className="m-1 btn btn-outline-info"  key={genreIndex.id} 
-          onClick={()=>  GetVideo(setGenre(genreIndex.id), setGenreName(genreIndex.name))}>
-           {genreIndex.name}
-          </button> ))}
-         </div> 
-     </section>
           
           
           </div> }
@@ -324,35 +337,47 @@ const App = () => {
           <div className="col-md-4 text-white text-start" id="MenuHeaders">
           
           <GenreBox GenreBtn={GenreBtn} GetVideo={GetVideo} setGenre={setGenre} 
-          setMovieOPtion={setMovieOPtion} movieOption={movieOption} 
+          setMovieOPtion={setMovieOPtion} movieOption={movieOption} mode={mode}
           GenreArray={GenreArray} thisGenre={thisGenre} setGenreName={setGenreName} />
         </div>
                 
             </div>
           </section>
           {/* AsideRight Right side displaying movie cards */} 
-          <section className="AsideRight   position-relative  justify-content-center col-lg-10 my-4 col">
+          <section className="AsideRight  position-relative  justify-content-center col-lg-10 my-4 col">
 
            <figure className="overview my-0 " onClick={()=>{setShowInput(false)}}>
             {/* Modal */}
              <Modal selected={selected} />
              {/* Rendering slides images */}
              <MovieSlider Movieslide={Movieslide} categoryOptions={categoryOptions}
-               mode={mode} movieOption={movieOption} genreName={genreName} />  
+               mode={mode} movieOption={movieOption} genreName={genreName}/> 
           </figure>
               {/* Moviecard rendering section */}
-              <div className='row' id="CardContainer" onClick={()=>{setShowInput(false)}}>
-              
-              {Svideo.map(Svideo => (<div key={Svideo.id} className={CardStyle} onClick={() => GetTrailer(Svideo, setShowModal(true))}>
-                <MovieCard Svideo={Svideo} />
-              </div>))} 
-            </div>
-            
-            {/* Pagination, Prev and Next button/current page  */}
-            <div className="d-flex pt-2 pb-5" onClick={()=>{setShowInput(false)}}>
+              <div style={{marginTop:'470px', position:'relative', right:'-12px'}} onClick={()=>{setShowInput(false)}}>
+              <h1 className={mode? ("text-start px-3 py-3 fs-1 fw-bold text-dark ") : 
+              ("text-start px-2 py-3 fs-1 fw-medium text-light ")
+            }>
+              {categoryOptions} 
+                 <span className={mode? "fw-light text-info fs-5 fw-medium mx-2" : "fw-light text-info fs-5 mx-2"}>
+                 {genreName}
+                 </span> 
+              </h1>
+               <div id="" className="row"  style={{ width:'100%'}}>
+               {Svideo.map(Svideo => (<div key={Svideo.id} style={{scale:'1'}}
+                className='col-lg-2 col-md-3 col-sm-4 col py-3' onClick={() => GetTrailer(Svideo, setShowModal(true))} >
+               <MovieCard style={{}} Svideo={Svideo} mode={mode} categoryOptions={categoryOptions} genreName={genreName}/>
+             </div>))} 
+               </div>
+               
+               {/* Pagination, Prev and Next button/current page  */}
+            <div className="d-flex  pb-5" onClick={()=>{setShowInput(false)}}>
             <Pages setSvideo={setSvideo} selected={selected} genre={genre} Movieslide={Movieslide} MovieType={MovieType} 
             showGenre={''}/>
           </div>
+            </div>
+            
+            
           </section>
         </div>
       </main>

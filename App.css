@@ -39,6 +39,23 @@
   
 }
 
+#menuGenre::-webkit-scrollbar{
+  background-color: inherit;
+  scroll-behavior: smooth;  
+  width:8px; 
+}
+
+#menuGenre::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 202, 255, 0.95);
+  scroll-behavior: smooth; 
+  border-radius: 20px;
+}
+
+#menuGenre::-webkit-scrollbar-track{
+   margin:  100px;
+}
+
+
 .posters{
    overflow-x: auto;
    flex-wrap: nowrap;
@@ -102,31 +119,6 @@
 }
 
 
-
-/* Menu scroll functionality and appearance */
-.Menu-container::-webkit-scrollbar{
-  background-color: #000;
-  width: 8px;
-  border-radius: 20px;
-  
-}
-
-.Menu-container::-webkit-scrollbar-track{
-  background-color: #000;
-   margin: 10px;
-}
-
-.Menu-container::-webkit-scrollbar-thumb{ border-radius: 25px;
-  background-color: rgba(0, 202, 255, 0.95);
-} 
-
-/* Main page card container */
-
-#CardContainer{
-  margin-top: 480px;
-  margin-left: 0px;
-}
-
 /* Menu page card container */
 
 #MoviesAndTv:hover{
@@ -134,10 +126,10 @@
 }
 
 .Card-Container{
-  overflow-x: auto;
   background-color: transparent;
   scroll-behavior: smooth;
   margin-top: 10px;
+  overflow-y: auto;
 }
 
 .sideBar-container::-webkit-scrollbar{
@@ -153,22 +145,24 @@
 }
 
 .sideBar-container::-webkit-scrollbar-track{
-   margin: 40px 0;
+   margin: 150px 0;
 }
 
 
 .Card-Container::-webkit-scrollbar{
   background-color: inherit;
   scroll-behavior: smooth;  
-  padding: 5px 0;
-  height: 7px; 
 }
 
-.Card-Container::-webkit-scrollbar-thumb{
+#Card-Container::-webkit-scrollbar-thumb{
   background-color: rgba(0, 202, 255, 0.95);
   scroll-behavior: smooth; 
-  border-radius: 5px;
+  border-radius: 0px;
   cursor: pointer;
+}
+
+#cardContainer{ 
+  padding: 0;
 }
 
 main{
@@ -194,6 +188,25 @@ main{
   color: #fff;
 }
 
+#genre li:hover{
+  color: rgba(0, 202, 255, 0.95);
+}
+
+#cardContainer::-webkit-scrollbar{
+  background-color: inherit;
+  height: 6px;
+  scroll-behavior: smooth;
+}
+
+#cardContainer::-webkit-scrollbar-track{
+  margin: 360px;
+}
+
+#cardContainer::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 202, 255, 0.95);
+  border-radius: 20px;
+  padding: 50px;
+}
 .dark{
   transition: 0.5s;
 }
@@ -220,9 +233,7 @@ input{
   z-index: 1;
 }
 
-.accordion-body li{
-  list-style: none;
-}
+
 
 .accordion-body li:hover{
   background-color: #fff;
@@ -312,33 +323,19 @@ input{
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.5);
 }
 
-
-.Cards{
+.Cards img{
   overflow: hidden;
-  border-radius: 1px;
-  margin: 16px 0;
-  transition: 0.5s;
-  background-color: #2020;
-  color: rgba(0, 202, 255, 0.95);
-}
-
-.CardImg{
-  border-radius: 0px;
-  width: 100%;
-}
-
-.CardImg img{
-  width: 100%;
-}
-
-.Cards:hover{
-  overflow: hidden;
-  transform: translateY(-12px);
-  transition: 0.7s;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  border-radius: 20px;
+  padding: 2px;
+  scale: 1;
 }
+
+.Cards img:hover{
+  transition: 0.7s;
+  cursor: pointer;
+  scale: 1.02;
+}
+
 
 .Mcontainer{
   width: 100%;
