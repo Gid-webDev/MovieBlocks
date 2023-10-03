@@ -2,7 +2,7 @@ import React from 'react'
 import {BsSearch} from 'react-icons/bs'
 
 const SearchArea = ({showInput, inputStyleSmall, setShowInput, Searcher, 
-    SearchMovies, setSearchMovies, movieOption, setMovieOPtion, GetVideo, 
+    SearchMovies, setSearchMovies, movieOption, setMovieOPtion, GetVideo, setCurrentPage,
     formStyleSmall, formStyleClassSmall, formStyleClassBig, formStyle2, InputClassBig}) => {
  
     
@@ -17,7 +17,9 @@ const SearchArea = ({showInput, inputStyleSmall, setShowInput, Searcher,
     value={SearchMovies}
     onChange={(e) => setSearchMovies(e.target.value)}
   />
-  <button className="btn rounded-0 shadow-none text-info" onClick={() => movieOption === true? GetVideo(SearchMovies, setShowInput(false), setMovieOPtion(true)) : setMovieOPtion(false)}>
+  <button className="btn rounded-0 shadow-none text-secondary" onClick={() => 
+    movieOption === true? GetVideo(SearchMovies, setShowInput(false), setCurrentPage(1), setMovieOPtion(true)) : 
+    GetVideo(SearchMovies, setShowInput(false), setCurrentPage(1), setMovieOPtion(false))}>
     <BsSearch type="submit" />
   </button>
 </form>
