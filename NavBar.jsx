@@ -27,7 +27,7 @@ const NavBar = ({}) => {
         
         <NavContainer 
           logo = {
-            <div className="fs-4 text-info">
+            <div className="fs-5 text-info">
             <BsFillGridFill/><span style={{fontSize:'14px'}}>Movie Blocks</span>
             </div>}
            />

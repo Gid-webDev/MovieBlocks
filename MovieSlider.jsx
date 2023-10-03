@@ -24,21 +24,23 @@ function MovieSlider({Movieslide, setMovieName, movieName,  mode, movieOption, g
     })
     const SlidesBtns = ["text-light d-flex justify-content-between px-3 position-relative Slides_Btns"]
     const getContainerSlide = () => ({
-      overflow:'hidden', height:'420px', display:'flex', width:'100%', position:'relative', boxShadow:'3px 3px 3px'
+      overflow:'hidden', height:'420px', display:'flex', width:'100%', position:'relative', 
+      boxShadow:'3px 3px 3px', top:'-8px', alignItems:'center'
   })
   const MovieSlideStyles = { backgroundSize:'cover ', backgroundPosition:'top', }
     const getMovieSlideStyles = ( MovieSlideIndex) =>  ({
       ...MovieSlideStyles,
      backgroundImage:  `url('${images}${Movieslide[MovieSlideIndex].backdrop_path}') `,
-     height:'420px', width:'100%',
+     height:'410px', width:'100%',
       });
 
      const  MovieContainerStyle= {height:'420px', display:'flex',
-      transition:'transform ease-out 1s', position:'absolute', 
+      transition:'transform ease-out 0.4s,', position:'absolute',
     }
      const getMovieSlideContainerStyles= ()=>({
       ...MovieContainerStyle,
-         width:'2000%', transform:`translateX(${ -(currSlide * 5)}%)`
+         width:'2000%', transform:`translateX(${ -(currSlide * 5)}%)`,
+         
       })
 
 
@@ -62,7 +64,7 @@ function MovieSlider({Movieslide, setMovieName, movieName,  mode, movieOption, g
             clearTimeout(timeRef.current)
         }
         Next();
-       }, 5000)
+       }, 3500)
        return() => clearTimeout(timeRef.current)
       });
   return (
@@ -71,12 +73,14 @@ function MovieSlider({Movieslide, setMovieName, movieName,  mode, movieOption, g
         <div style={getContainerSlide()}>
 
         <figure id='slideImage' style={getMovieSlideContainerStyles()}> 
-        {Movieslide.map((movieForEach, MovieSlideIndex)=> (<div key={Movieslide.id} 
+        {Movieslide.map((movieForEach, MovieSlideIndex)=> (<div key={MovieSlideIndex} 
           style={getMovieSlideStyles( MovieSlideIndex)} onLoad={()=> setMovieName(movieForEach.name)}> 
-          <div id='movieName' style={{bottom:'0px'}}
-          className='fw-bold fs-1 w-100   text-start position-absolute'>
-          <div id='slideInfo' className={mode ===true? 'text-light bg-dark py-1 px-4' : 'text-dark bg-light py-1 px-4'}>
-               <p className='fs-2'>
+          <div id='movieName' style={{top:'340px'}}
+          className='fw-bold fs-1 text-start w-100 text-start position-relative'>
+          <div id='slideInfo' style={{height:'90px', display:'flex', alignItems:'center'}}
+          className={mode ===true? 'text-light bg-dark  px-5' : 
+          'text-dark bg-light px-4'}>
+               <p className='fs-1'>
                  {movieOption? (Movieslide[MovieSlideIndex].original_title) :
                   Movieslide[MovieSlideIndex].original_name
                 } 
@@ -88,9 +92,13 @@ function MovieSlider({Movieslide, setMovieName, movieName,  mode, movieOption, g
    </div>))
         }
     </figure>
-    <div className={SlidesBtns}>
-           <div id="btn" onClick={Next}> <BiChevronLeft/></div>
-           <div id="btn" onClick={Prev}> <BiChevronRight/></div>
+    <div className={SlidesBtns} >
+           <div id="btn" onClick={Next} style={{top:'35%'}}> 
+           <BiChevronLeft/>
+           </div>
+           <div id="btn" onClick={Prev} style={{right:'-11px', top:'35%'}}> 
+           <BiChevronRight/>
+           </div>
          </div>
         </div>
 

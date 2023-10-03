@@ -45,16 +45,33 @@
   width:8px; 
 }
 
+#menuGenre::-webkit-scrollbar-track{
+   margin:  100px;
+}
+
 #menuGenre::-webkit-scrollbar-thumb{
   background-color: rgba(0, 202, 255, 0.95);
   scroll-behavior: smooth; 
   border-radius: 20px;
 }
 
-#menuGenre::-webkit-scrollbar-track{
-   margin:  100px;
+.WWE::-webkit-scrollbar-track{
+   margin:  200px;
 }
 
+.WWE::-webkit-scrollbar{
+  background-color: inherit;
+  scroll-behavior: smooth;  
+  height:7px; 
+  
+}
+
+.WWE::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 202, 255, 0.95);
+  scroll-behavior: smooth; 
+  border-radius: 20px;
+  padding: 50px;
+}
 
 .posters{
    overflow-x: auto;
@@ -188,9 +205,9 @@ main{
   color: #fff;
 }
 
-#genre li:hover{
-  color: rgba(0, 202, 255, 0.95);
-}
+#genre li:hover{color: rgba(0, 202, 255, 0.95);}
+
+#menuGenre li:hover{color: rgba(0, 202, 255, 0.95);}
 
 #cardContainer::-webkit-scrollbar{
   background-color: inherit;
@@ -369,7 +386,6 @@ input{
 
 .Page{
   font-size: 1em;
-  background-color: rgba(0, 202, 255, 0.95);
   padding: 7px 12px;
   border-radius: 5px;
 }
