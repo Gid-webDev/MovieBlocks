@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios";
-import {Naija, WWECard, UFCcard} from "./SpecialCard"
+import {Naija, WWECard, UFCcard, UEFAcard} from "./SpecialCard"
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 
@@ -16,12 +16,11 @@ const images = "https://image.tmdb.org/t/p/original/"
 
 /* WRESTLING SECTION */
 export const Wrestling = ({wwe, mode, SpecialCollections, MovieType,
-  Video_API, myKey, setWWE, GetTrailer, setShowInput, setShowModal,}) => {
+  Video_API, myKey, setWWE, GetTrailer, setShowInput, setShowModal, WWEPage, setWWEPage}) => {
 
-  const [WWEPage, setWWEPage] = useState(1)
+  
   const handlePrevPage = () => setWWEPage((PrevPage)=> PrevPage - 1 )
   const handleNextPage = () => setWWEPage((PrevPage)=> PrevPage + 1 )
-
   const GetWWE = async () => {
       const Type = "search"
       const {data: {results}} = await axios.get(`${Video_API}/${Type}/${MovieType}`,{
@@ -74,14 +73,12 @@ export const Wrestling = ({wwe, mode, SpecialCollections, MovieType,
 
 /* UFC SECTION */
 export const UFCfight = ({UFC, setUFC, mode, SpecialCollections, MovieType,
-  Video_API, myKey, GetTrailer, setShowInput, setShowModal}) => {
+  Video_API, myKey, GetTrailer, setShowInput, setShowModal, UFCPage, setUFCPage}) => {
 
-  const [UFCPage, setUFCPage] = useState(1)
   const handlePrevPage = () => setUFCPage((PrevPage)=> PrevPage - 1 )
   const handleNextPage = () => setUFCPage((PrevPage)=> PrevPage + 1 )
 
   const GetUFC = async () => {
-  
   const Type = "search"
   const {data: {results}} = await axios.get(`${Video_API}/${Type}/${MovieType}`,{
       params: {
@@ -131,11 +128,8 @@ export const UFCfight = ({UFC, setUFC, mode, SpecialCollections, MovieType,
 }
 
 {/* NAIJA COLLECTIONS */}
-
 export const Nigerian = ({naija, setNaija, mode, genreName, SpecialCollections, MovieType, 
-  Video_API, myKey, GetTrailer, setShowInput, setShowModal,}) => {
-
-  const [NaijaPage, setNaijaPage] = useState(1)
+  Video_API, myKey, GetTrailer, setShowInput, setShowModal, NaijaPage, setNaijaPage}) => {
 
   const handlePrevPage = () => setNaijaPage((PrevPage)=> PrevPage - 1 )
   const handleNextPage = () => setNaijaPage((PrevPage)=> PrevPage + 1 )
@@ -192,6 +186,68 @@ useEffect(()=>{
       </div>
   );
 }
+
+
+{/* UEFA COLLECTIONS */}
+export const Football = ({UEFA, setUEFA, mode, genreName, SpecialCollections, MovieType, 
+  Video_API, myKey, GetTrailer, setShowInput, setShowModal, UEFAPage, setUEFAPage}) => {
+
+  const handlePrevPage = () => setUEFAPage((PrevPage)=> PrevPage - 1 )
+  const handleNextPage = () => setUEFAPage((PrevPage)=> PrevPage + 1 )
+
+  const GetUEFA = async () => {
+      const Type = "search"
+      const {data: {results}} = await axios.get(`${Video_API}/${Type}/${MovieType}`,{
+          params: {
+              page: `${UEFAPage}`,
+              api_key: (`${myKey}`),
+              query: 'uefa',
+          }
+      })
+       setUEFA(results)            
+    }
+
+    const Mode = mode === true? {color:"#000"} : {color:'#fff'}
+    const getPageStyles = () => ({
+      ...Mode, alignItems:'center', display:'flex', margin:'0 10px', cursor:'pointer'
+    })
+
+useEffect(()=>{
+    GetUEFA();
+  },[UEFAPage, MovieType]);
+
+  return(
+      <div>
+      <section /* UEFA SECTION */ className="py-2"  onClick={()=> setShowInput(false)}>
+      <p className={SpecialCollections}> Football Document
+      <span className="text-info">ries </span> </p>
+        <div className="WWE d-flex overflow-x-auto" style={{position:'relative', top:'-24px'}} >
+          {UEFA.map((UEFA, UEFAIndex) => (<div key={UEFAIndex} style={{width:'', marginLeft:'20px' }}
+          onClick={() => GetTrailer(UEFA, setShowModal(true))}>
+          <UEFAcard mode={mode} genreName={genreName} UEFA={UEFA}/>
+         </div>))}
+        </div>
+
+        <div /* fLIP THROUGH PAGES */ className="pagesBtn d-flex rounded mx-2" style={{scale:'1'}}>
+           {UEFAPage !== 1? 
+            <div style={getPageStyles()}   
+           onClick={handlePrevPage}> 
+           <BiChevronLeft className={buttonStyle} /> </div> 
+           :  null}
+           <div className={mode? "btn  text-light" : 
+            "Page text-info"} id="currentPage" style={{border:'0'}}>
+            Page <span className="fw-bold">{UEFAPage}</span>
+           </div>  
+           <div style={getPageStyles()}  
+           onClick={handleNextPage}> 
+            <BiChevronRight className={buttonStyle}/> 
+           </div>
+        </div>
+       </section>
+      </div>
+  );
+}
+
 
 
      

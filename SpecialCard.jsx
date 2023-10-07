@@ -58,6 +58,25 @@ export const UFCcard = ({UFC, mode}) => {
     
 }
 
+export const UEFAcard = ({UEFA, mode}) => {
+    return(
+        <div className="">
+            <div className="Cards mx-3 my-2" style={{ width:'105%'}}  >
+            <img className="img-fluid" src={`${images}${UEFA.poster_path}` } alt=""/>
+           <div className={mode? ("text-dark text-start fs-5 px-1 fw-bold") :
+           ("text-light text-start fs-6 px-2 fw-bold")
+            }  > 
+           <span className="fw-light" style={{fontSize:'13.5px'}}>
+           Date {UEFA.release_date}    {UEFA.first_air_date} <br/>
+           </span>
+           </div>
+          </div>
+           
+        </div>
+    );
+    
+}
+
 
 
 

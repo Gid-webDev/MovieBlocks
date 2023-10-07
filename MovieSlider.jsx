@@ -77,7 +77,7 @@ function MovieSlider({Movieslide, setMovieName, movieName,  mode, movieOption, g
           style={getMovieSlideStyles( MovieSlideIndex)} onLoad={()=> setMovieName(movieForEach.name)}> 
           <div id='movieName' style={{top:'340px'}}
           className='fw-bold fs-1 text-start w-100 text-start position-relative'>
-          <div id='slideInfo' style={{height:'90px', display:'flex', alignItems:'center'}}
+          <div id='slideInfo' style={{minHeight:'100px', display:'flex', alignItems:'center'}}
           className={mode ===true? 'text-light bg-dark  px-5' : 
           'text-dark bg-light px-4'}>
                <p className='fs-1'>
