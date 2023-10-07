@@ -11,7 +11,7 @@ import {GiFilmSpool } from "react-icons/gi"
 import { CiYoutube } from "react-icons/ci"
 import { AiOutlineClose, AiFillGithub, AiFillLinkedin, AiOutlineTwitter, AiFillFacebook, AiOutlineWhatsApp } from "react-icons/ai";
 import axios from "axios";
-import { FaPlay, FaTh, FaToggleOn, FaToggleOff} from "react-icons/fa";
+import { FaPlay, FaSearch} from "react-icons/fa";
 import YouTube from "react-youtube"
 import { ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
 import NavMenu from "./Menu";
@@ -23,7 +23,8 @@ import {FaRegMoon} from "react-icons/fa"
 import GenreBox from "./GenreBox";
 import SearchArea from "./SearchArea";
 import * as myGenre from './AllGenre';
-import {Nigerian, UFCfight, Wrestling} from "./MovieApi";
+import {Football, Nigerian, UFCfight, Wrestling} from "./MovieApi";
+import {ImSearch} from 'react-icons/im'
 
 
 
@@ -56,10 +57,15 @@ const App = () => {
   const [wwe, setWWE] = useState([]);
   const [UFC, setUFC] = useState([]);
   const [naija, setNaija] = useState([]);
+  const [UEFA, setUEFA] = useState([]);
   const [genreName, setGenreName] = useState('');
   const [showcategory, setShowCategory] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showInput, setShowInput] = useState(false);
+  const [WWEPage, setWWEPage] = useState(1);
+  const [UFCPage, setUFCPage] = useState(1);
+  const [NaijaPage, setNaijaPage] = useState(1);
+  const [UEFAPage, setUEFAPage] = useState(1);
 
 
 
@@ -108,6 +114,7 @@ const App = () => {
   
   useEffect(() => {
   GetVideo();
+
   }, [currentPage, MovieType, genre] );
 
   
@@ -191,8 +198,8 @@ const App = () => {
   const CardContainer_D = [/* Dark Mode for cards */ "sect text-light py-3  row w-100"];
   const CardContainer_L = [/* Light Mode for cards */ " sect text-light py-3 bg-light row w-100"];
   mode? CardContainer_L : CardContainer_D
-  const HeaderStyly_D = [/* Dark Mode for cards */ "text-secondary py-0 fixed-top bg-black"]
-  const HeaderStyly_L = [/* Light Mode for cards */ "text-secondary py-0 fixed-top bg-dark"];
+  const HeaderStyly_D = [/* Dark Mode for cards */ "bg-black text-secondary fixed-top"]
+  const HeaderStyly_L = [/* Light Mode for cards */ "text-secondary py-0 fixed-top bg-black"];
   const CardsHeadr = ["filter", "COLLECTIONS", "TRENDING", "TV SERIES", "ANIMATION", "Nollywood", "Bollywood", "Wrestling", "UFC"];
   const CardStyle = ["CardImg "];
   const MenuCards = ["CardImg mx-2"];
@@ -200,7 +207,7 @@ const App = () => {
   const Arrows = ( <div className="arrows d-flex justify-content-between">
                    <button className="arrows"><h2><BiChevronLeft className="text-danger"/></h2></button>  
                    <button className="arrows"><h2><BiChevronRight className="text-danger"/></h2></button> </div>)
-  const DarkMode = ["bg-dark row dark"]
+  const DarkMode = ["bg-black row dark"]
   const LightMode = ["bg-light row light"]
   const Mode = mode?  LightMode : DarkMode
   const GenreBtn = ["fs  rounded p-2  d-flex  d-lg-flex"]
@@ -214,23 +221,28 @@ const App = () => {
   const formStyle2 = {boxShadow:'0 2px 2px', maxWidth:'60vw'}
   const InputClassBig = ["container-fluid"]
   /* small screen search/input accessories */
-  const formStyleClassSmall = ["d-lg-none rounded mx-2 bg-light position-fixed"]
-  const formStyleSmall = {position:'absolute', width:'65%', zIndex:'5', boxShadow:'1px 0px 2px 2px rgba(0, 0, 0)', 
-  display:'flex', flex:'1', right:'0', top:'60px', transform:'translatey(15px)', padding:'4px 0',
-  transition:'transform ease-out 0.5s' }
-  const inputStyleSmall = ["container-fluid bg-light text-dark d-flex flex-1 rounded"]
+  const formStyleClassSmall = showInput ? ["d-lg-none rounded  bg-light position-fixed"] :
+  ["d-lg-none rounded  bg-black position-fixed"]
+  const formStyleSmall = showInput? {position:'absolute', width:'100%', zIndex:'5', boxShadow:'1px 0px 2px 2px rgba(0, 0, 0)', 
+  display:'flex', flex:'1', right:'0', top:'0px', padding:'3px 0',
+  transition:'0.8s',} : 
+  {position:'absolute', width:'0%', zIndex:'-5', boxShadow:'1px 0px 2px 2px rgba(0, 0, 0)', 
+  display:'flex', flex:'1', right:'10%', top:'0px', padding:'', transition:'0.8s'
+   }
+  const inputStyleSmall = showInput? ["container-fluid bg-light text-black fs-5 d-flex flex-1 rounded"] :
+  ["container-fluid bg-black text-black fs-5 d-flex flex-1 rounded"]
   /* TV SERIES AND MOVIES GENRE (Option)LOGIC */
   const thisGenre = movieOption === true? myGenre.NewMoviesGenre : myGenre.NewTvGenre
   /*  STYLES FOR GENRES INSIDE THE MENU */
-  const MoviesAndTv = showcategory === true? ({fontSize:'13.8px', cursor:'pointer', padding:'10px 0px', width:'95px', transition:'0.3s'}) :
-  {fontSize:'0px', width:'0px',}
-  const categoryandGenreStyle = ("text-info px-1")
+  const MoviesAndTv = showcategory === true? ({fontSize:'13.8px', cursor:'pointer', padding:'9px', minWidth:'80px', transition:'0.5s'}) :
+  ({fontSize:'0px', cursor:'pointer', padding:'0px', minWidth:'80px', transition:'0.5s',})
+  const categoryandGenreStyle = ("text-info px-2")
   const categoryOptions = movieOption === true? 'MOVIES' : 'TV Series'
   const categoryHover = {color:''}
   const onmouseover = () => ({
     ...categoryHover, cursor:'pointer'
   })
-  const SpecialCollections = [mode? "text-start bg-dark text-light fw-bold fs-2 px-2 py-1" : 
+  const SpecialCollections = [mode? "text-start bg-black text-light fw-bold fs-2 px-2 py-1" : 
   "bg-light fw-bold fs-2 text-start text-dark px-2 py-1"]
   const myLinks = [
     {name: <AiFillGithub/>, link: "https://github.com/Gid-webDev"},
@@ -241,60 +253,87 @@ const App = () => {
   ]
   
  
-  
-
-  
-  
+   
   return (
     <>
-      <header className={mode? HeaderStyly_L : HeaderStyly_D}>
+      <header className={mode? HeaderStyly_L : HeaderStyly_D} style={{}}>
          
-        {show&& <div className="Menu-container px-3" style={{overflowY:'hidden', height:'100vh', zIndex:'5'}}>
-        <div className="menuHeader px-3  py-1  d-flex justify-content-between" > 
-        {/* Genre Options buttons */}
-           <div> <NavBar/> </div>
-           {/* close menu button*/}
-           <div onClick={() => setShow(false)} className="CloseMenu text-info  fs-5 "
-             style={{cursor:'pointer'}}> 
-            <AiOutlineClose />
+        {show&& <div className=" px-4 py-1" style={{overflowY:'hidden', height:'100vh', zIndex:'10'}}>
+        <div className="menuHeader  py-1  d-flex justify-content-between" > 
+           <div /* BRAND LOGO IS HIDDEN INSIDE THE MENU*/ className=" d-none"> 
+             <NavBar/> 
+            </div>
+            
+           <div  className=""
+             style={{cursor:'pointer', width:'100%', display:'flex', alignItems:'center',
+              justifyContent:'space-between', scale:'0.98'}}>
+             <div /* SEARCH BUTTON TRIGGERS THE SEARCH INPUT */ className="">
+             {showInput === true? (
+              null
+              ) : (
+             <div /* button for showing search accessories for smallsize screens */ 
+              className="btn text-info d-lg-none d-block" onClick={() => setShowInput(true) }
+              style={{position:'absolute', top:'1px', scale:'1'}}>
+              <ImSearch type="submit" style={{zIndex:'10', fontSize:'30px'}} />
+             </div>
+             )}
+              <div /* show search input and button for small to medium screen size*/>
+             <SearchArea SearchMovies={SearchMovies} setSearchMovies={setSearchMovies} movieOption={movieOption}
+             setMovieOPtion={setMovieOPtion} showInput={showInput} setShowInput={setShowInput} Searcher={Searcher}
+             GetVideo={GetVideo} formStyleClassSmall={formStyleClassSmall} formStyleSmall={formStyleSmall} setCurrentPage={setCurrentPage}
+             inputStyleSmall={inputStyleSmall} setShow={setShow} show={show}
+             />
+             </div>
+             </div> 
+            <div /* close menu button*/ className="btn btn-info" style={{scale:'0.79', zIndex:'0'}}>
+              <AiOutlineClose className="fs-4" onClick={()=> setShow(false)}/>
+            </div>
+
            </div>
        </div>
-     <div className="container d-flex justify-content-between  py-1">
-     <h6 style={onmouseover()} className="btn btn-outline-dark text-secondary"
-     onClick={()=> showcategory === true? setShowCategory(false) : setShowCategory(true)}> 
-        CATEGORY   <div className="d-flex my-2 px-2 position-absolute bg-light rounded" 
-        style={{top:'48px', left:'40%', zIndex:'0'}}> 
-          <div style={MoviesAndTv}  onClick={()=> GetVideo(setMovieOPtion(true), setShowCategory(false))}> MOVIES</div> 
-          <div style={MoviesAndTv}  onClick={()=> GetVideo(setMovieOPtion(false), setShowCategory(false))}> TV SERIES</div> 
+     <div className=" d-flex justify-content-between px-3 py-1" onClick={()=> setShowInput(false)}>
+     <h6 style={{marginRight:'0px'}} className="btn btn-outline-light my-2 d-flex align-items-center" 
+        onClick={()=> showcategory === true? setShowCategory(false) : setShowCategory(true)}> 
+         CATEGORY 
+         <div className="d-flex mx-2 px-2 text-dark position-absolute bg-light rounded" style={{top:'62.5px', left:'40%', zIndex:'0' }}> 
+          <div style={MoviesAndTv}  onClick={()=> GetVideo(setMovieOPtion(true, 
+            setWWEPage(1), setUFCPage(1), setNaijaPage(1)), setUEFAPage(1), setShowCategory(false),)}>
+           MOVIES
+          </div> 
+          <div style={MoviesAndTv}  onClick={()=> GetVideo(setMovieOPtion(false, 
+            setWWEPage(1), setUFCPage(1), setNaijaPage(1), setUEFAPage(1)),  setShowCategory(false), )}> 
+           TV SERIES
+          </div> 
         </div>
      </h6>
      
-      <h6>
-      GENRE: <span className={categoryandGenreStyle}> {genreName} </span>
+      <h6 onClick={() => setShowCategory(false)}>
+       <span className='text-info btn fw-bold px-2' style={{fontSize:'19px'}}> {genreName} </span>
       </h6>  
      </div>
-     <div className=" row g-0 w-100 py-3"  style={{height:'80vh', overflow:'hidden'}}>
+     <div className=" row g-0 w-100 py-3"  style={{height:'80vh', overflow:'hidden'}} onClick={()=> setShowInput(false, setShowCategory(false))}>
      <section /* GENRES FOR MOVIES AND TV SERIES INSIDE THE MENU */  
      className="col-md-6">
      <ul  className="px-0 row mx-1 " 
-     style={{justifyContent:'center', display:'flex', height:'80vh', overflowY:'auto', overflowX:'hidden'}} id="menuGenre"> 
+     style={{justifyContent:'start', display:'flex', height:'80vh', overflowY:'auto', overflowX:'hidden'}} id="menuGenre"> 
      {  
-      thisGenre.map( (genreIndex, genreId,)=> (genreId, 
-      <li className="m-1 text-start col-lg-6 fs-6"
-      style={{placeContent:'center', placeItems:'center', listStyle:'none', cursor:'pointer'}} 
-      key={genreIndex.id} 
+      thisGenre.map( (genreIndex, genreId,)=> ( 
+      <li className="m-1 text-start col-lg-6 fs-6 text-light"
+      style={{placeContent:'center', placeItems:'center', listStyle:'none', 
+      cursor:'pointer', lineHeight:'1'}} 
+      key={genreId} 
       onClick={()=>  GetVideo(setGenre(genreIndex.id), setCurrentPage(1), setGenreName(genreIndex.name), setShowCategory(false))}>
-       {genreIndex.name} <hr/>
+         {genreIndex.name} <hr className="text-secondary"/>
       </li> ))}
      </ul> 
  </section>
 
- <section /* MENU WITH MOVIE CARDS RENDERED */ className=" col-md-6 d-md-block d-none py-3"
- style={{overflow:'auto', height:'80vh'}} id="menuGenre">
+ <section /* MENU WITH MOVIE CARDS RENDERED */ className=" col-md-6 d-md-flex justify-content-end d-none py-3"
+ style={{overflow:'auto', height:'80vh',}} id="menuGenre">
   <div > 
     <div className={MenuPosters} >
         {Svideo.map((Svideo) => <div className={ MenuCards}  
-        style={{border:'solid #ddd 0px', width:'400px', scale:'0.9' , cursor:'pointer',
+        style={{border:'solid #ddd 0px', minWidth:'300px', scale:'0.8' , cursor:'pointer',
         boxShadow:'1px 1px 3px 1px rgba(255, 255, 255, 0.4)' }}
         key={Svideo.id} onClick={() => GetTrailer(Svideo, series, setShowModal(true), setSelected(Svideo))}>
        <Posters Svideo={Svideo} genreName={genreName} categoryOptions={categoryOptions} />
@@ -303,8 +342,7 @@ const App = () => {
   </div>     
   </section>
  </div>
-      
-          </div> }
+    </div>}
 
         <div className="m-3  d-flex  justify-content-between  align-items-center">
           <div className="logo" onClick={()=>{setShowInput(false)}}>
@@ -313,33 +351,15 @@ const App = () => {
           
           
 
-          <div  className={NavContainer} style={{minWidth:'140px'}}>
+          <div  className={NavContainer} style={{minWidth:'85px'}}>
           
 
           {/* search accessories large screens input & button */ }
             <SearchArea SearchMovies={SearchMovies} setSearchMovies={setSearchMovies} movieOption={movieOption}
              setMovieOPtion={setMovieOPtion} Searcher={Searcher} GetVideo={GetVideo} 
-             InputClassBig={InputClassBig}  formStyle2={formStyle2} formStyleClassBig={formStyleClassBig}
-             showInput={showInput} setShowInput={setShowInput} setCurrentPage={setCurrentPage}
+             InputClassBig={InputClassBig}  formStyle2={formStyle2} formStyleClassBig={formStyleClassBig} 
+             showInput={showInput} setShowInput={setShowInput} setCurrentPage={setCurrentPage} 
             /> 
-
-            {/* show search input and button for small to medium screen size*/
-            showInput === true?  <SearchArea SearchMovies={SearchMovies} setSearchMovies={setSearchMovies} movieOption={movieOption}
-            setMovieOPtion={setMovieOPtion} showInput={showInput} setShowInput={setShowInput} Searcher={Searcher}
-            GetVideo={GetVideo} formStyleClassSmall={formStyleClassSmall} formStyleSmall={formStyleSmall} setCurrentPage={setCurrentPage}
-            inputStyleSmall={inputStyleSmall} 
-           /> : ''
-         }
-
-         {showInput === true? (
-          null
-       ) : (
-         <div /* button for showing search accessories for small and size screens */ 
-          className="btn text-info d-lg-none " onClick={() => setShowInput(true) }
-          style={{position:'relative', top:'-1px', }}>
-          <BsSearch type="submit" className="fs-5" style={{zIndex:'10'}} />
-     </div>
-       )}
 
           <h4 /* dark and light mode toggle */>
           {mode? (<div className=" text-info" onClick={()=> {setMode(false)}}> <MdLightMode className="fs-5" style={{cursor:'pointer'}} /></div>)
@@ -354,7 +374,7 @@ const App = () => {
               </h3>} />
           </div>
         </div>
-      </header>
+      </header> 
 
       <main className="">
         <div className={Mode} id="main-container">
@@ -419,19 +439,29 @@ const App = () => {
              <section /* WRESTLING  */>
              <Wrestling wwe={wwe} setWWE={setWWE} naija={naija} mode={mode} Video_API={Video_API} 
                myKey={myKey} SpecialCollections={SpecialCollections} GetTrailer={GetTrailer}
-               setShowInput={setShowInput} setShowModal={setShowModal} MovieType={MovieType}/>
+               setShowInput={setShowInput} setShowModal={setShowModal} MovieType={MovieType}
+               setWWEPage={setWWEPage} WWEPage={WWEPage}/>
              </section>
              
               <section /* UFC  */>
               <UFCfight UFC={UFC} setUFC={setUFC} naija={naija} mode={mode} Video_API={Video_API} 
                myKey={myKey} SpecialCollections={SpecialCollections} GetTrailer={GetTrailer}
-               setShowInput={setShowInput} setShowModal={setShowModal} MovieType={MovieType}/>
+               setShowInput={setShowInput} setShowModal={setShowModal} MovieType={MovieType}
+               UFCPage={UFCPage} setUFCPage={setUFCPage}/>
               </section>
 
              <section /* Naija */>
               <Nigerian naija={naija} mode={mode} setNaija={setNaija} MovieType={MovieType}
                Video_API={Video_API} myKey={myKey} SpecialCollections={SpecialCollections}
-               setShowInput={setShowInput} setShowModal={setShowModal} GetTrailer={GetTrailer}/>
+               setShowInput={setShowInput} setShowModal={setShowModal} GetTrailer={GetTrailer}
+               setNaijaPage={setNaijaPage} NaijaPage={NaijaPage}/>
+             </section>
+
+             <section /* UEFA */>
+              <Football UEFA={UEFA} mode={mode} setUEFA={setUEFA} MovieType={MovieType}
+               Video_API={Video_API} myKey={myKey} SpecialCollections={SpecialCollections}
+               setShowInput={setShowInput} setShowModal={setShowModal} GetTrailer={GetTrailer}
+               setUEFAPage={setUEFAPage} UEFAPage={UEFAPage}/>
              </section>
 
             </div>
